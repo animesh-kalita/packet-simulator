@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  packet-simulator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BUILDKIT_INLINE_CACHE: 1
+    image: packet-simulator:latest
+    container_name: packet-simulator
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./logs:/app/logs:rw
+      - ./config:/app/config:rw
+    environment:
+      - NODE_ENV=production
+      - PORT=8080
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:8080/api/health', (res) => process.exit(res.statusCode === 200 ? 0 : 1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - packet-sim-network
+
+  # Development service (optional)
+  packet-simulator-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: backend
+    container_name: packet-simulator-dev
+    ports:
+      - "8080:8080"
+      - "5173:5173"  # Vite dev server
+    volumes:
+      - ./backend:/app/backend:ro
+      - ./frontend:/app/frontend:ro
+      - ./logs:/app/logs:rw
+      - ./config:/app/config:rw
+      - /app/backend/node_modules
+      - /app/frontend/node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=8080
+    profiles:
+      - dev
+    networks:
+      - packet-sim-network
+
+networks:
+  packet-sim-network:
+    driver: bridge

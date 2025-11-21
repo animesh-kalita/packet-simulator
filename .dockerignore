@@ -1,0 +1,46 @@
+# Dependencies
+node_modules
+*/node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+frontend/dist
+backend/dist
+build/
+
+# Development files
+.git
+.gitignore
+.vscode
+.idea
+*.swp
+*.swo
+
+# Environment and config
+.env*
+.nyc_output
+coverage
+.coverage
+
+# Runtime data
+logs/*
+uploads/*
+temp/*
+*.log
+
+# Documentation and scripts
+README.md
+*.md
+build.sh
+run.sh
+test-local.sh
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker files
+Dockerfile*
+docker-compose*

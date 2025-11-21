@@ -1,0 +1,11 @@
+{
+  "protocol": "tcp",
+  "host": "127.0.0.1",
+  "port": 19999,
+  "url": "http://localhost:3000/api/test",
+  "method": "POST",
+  "headers": {},
+  "delimiter": "\r\n",
+  "interval": 5,
+  "lastInputType": "text"
+}
