@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Card,
@@ -20,154 +20,159 @@ import {
   List,
   ListItem,
   ListItemText,
-  Divider
-} from '@mui/material'
+  Divider,
+  FormControlLabel,
+  Checkbox,
+} from "@mui/material";
 import {
   PlayArrow as PlayIcon,
   Stop as StopIcon,
   Upload as UploadIcon,
-  Visibility as PreviewIcon
-} from '@mui/icons-material'
+  Visibility as PreviewIcon,
+} from "@mui/icons-material";
 import {
   getConfig,
   saveConfig,
   startSimulation,
   stopSimulation,
   getSimulationStatus,
-  previewPackets
-} from '../services/api'
+  previewPackets,
+} from "../services/api";
 
 function SimulationPanel({ systemInfo }) {
   const [config, setConfig] = useState({
-    protocol: 'tcp',
-    host: '127.0.0.1',
+    protocol: "tcp",
+    host: "127.0.0.1",
     port: 19999,
-    url: 'http://localhost:3000/api/test',
-    method: 'POST',
-    headers: '{}',
-    delimiter: '\r\n',
-    interval: 5
-  })
-  
-  const [inputType, setInputType] = useState('text')
-  const [textInput, setTextInput] = useState('')
-  const [selectedFile, setSelectedFile] = useState(null)
-  const [preview, setPreview] = useState(null)
-  const [status, setStatus] = useState({ isRunning: false })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
-  const [success, setSuccess] = useState(null)
+    url: "http://localhost:3000/api/test",
+    method: "POST",
+    headers: "{}",
+    delimiter: "\r\n",
+    interval: 5,
+  });
+
+  const [inputType, setInputType] = useState("text");
+  const [textInput, setTextInput] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [status, setStatus] = useState({ isRunning: false });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [convertToBinary, setConvertToBinary] = useState(false);
 
   useEffect(() => {
-    loadConfig()
-    checkStatus()
-    const interval = setInterval(checkStatus, 2000)
-    return () => clearInterval(interval)
-  }, [])
+    loadConfig();
+    checkStatus();
+    const interval = setInterval(checkStatus, 2000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
-    if (systemInfo?.defaultIp && config.host === '127.0.0.1') {
-      setConfig(prev => ({ ...prev, host: systemInfo.defaultIp }))
+    if (systemInfo?.defaultIp && config.host === "127.0.0.1") {
+      setConfig((prev) => ({ ...prev, host: systemInfo.defaultIp }));
     }
-  }, [systemInfo])
+  }, [systemInfo]);
 
   const loadConfig = async () => {
     try {
-      const savedConfig = await getConfig()
-      setConfig(savedConfig)
+      const savedConfig = await getConfig();
+      setConfig(savedConfig);
     } catch (err) {
-      console.error('Failed to load config:', err)
+      console.error("Failed to load config:", err);
     }
-  }
+  };
 
   const checkStatus = async () => {
     try {
-      const currentStatus = await getSimulationStatus()
-      setStatus(currentStatus)
+      const currentStatus = await getSimulationStatus();
+      setStatus(currentStatus);
     } catch (err) {
-      console.error('Failed to get status:', err)
+      console.error("Failed to get status:", err);
     }
-  }
+  };
 
   const handleConfigChange = (field, value) => {
-    setConfig(prev => ({ ...prev, [field]: value }))
-  }
+    setConfig((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleFileChange = (event) => {
-    const file = event.target.files[0]
-    setSelectedFile(file)
-    setPreview(null)
-  }
+    const file = event.target.files[0];
+    setSelectedFile(file);
+    setPreview(null);
+  };
 
   const handlePreview = async () => {
     try {
-      setLoading(true)
-      const formData = new FormData()
-      formData.append('inputType', inputType)
-      
-      if (inputType === 'text') {
-        formData.append('textInput', textInput)
+      setLoading(true);
+      const formData = new FormData();
+      formData.append("inputType", inputType);
+      formData.append("convertToBinary", convertToBinary);
+
+      if (inputType === "text") {
+        formData.append("textInput", textInput);
       } else if (selectedFile) {
-        formData.append('packetFile', selectedFile)
+        formData.append("packetFile", selectedFile);
       }
 
-      const result = await previewPackets(formData)
-      setPreview(result)
-      setError(null)
+      const result = await previewPackets(formData);
+      setPreview(result);
+      setError(null);
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to preview packets')
+      setError(err.response?.data?.error || "Failed to preview packets");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleStart = async () => {
     try {
-      setLoading(true)
-      
+      setLoading(true);
+
       // Save current config
-      await saveConfig(config)
-      
-      const formData = new FormData()
-      formData.append('protocol', config.protocol)
-      formData.append('interval', config.interval)
-      formData.append('inputType', inputType)
-      
-      if (config.protocol === 'tcp') {
-        formData.append('host', config.host)
-        formData.append('port', config.port)
-        formData.append('delimiter', config.delimiter)
+      await saveConfig(config);
+
+      const formData = new FormData();
+      formData.append("protocol", config.protocol);
+      formData.append("interval", config.interval);
+      formData.append("inputType", inputType);
+      formData.append("convertToBinary", convertToBinary);
+
+      if (config.protocol === "tcp") {
+        formData.append("host", config.host);
+        formData.append("port", config.port);
+        formData.append("delimiter", config.delimiter);
       } else {
-        formData.append('url', config.url)
-        formData.append('method', config.method)
-        formData.append('headers', config.headers)
-      }
-      
-      if (inputType === 'text') {
-        formData.append('textInput', textInput)
-      } else if (selectedFile) {
-        formData.append('packetFile', selectedFile)
+        formData.append("url", config.url);
+        formData.append("method", config.method);
+        formData.append("headers", config.headers);
       }
 
-      const result = await startSimulation(formData)
-      setSuccess(`Simulation started with ${result.packetCount} packets`)
-      setError(null)
+      if (inputType === "text") {
+        formData.append("textInput", textInput);
+      } else if (selectedFile) {
+        formData.append("packetFile", selectedFile);
+      }
+
+      const result = await startSimulation(formData);
+      setSuccess(`Simulation started with ${result.packetCount} packets`);
+      setError(null);
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to start simulation')
+      setError(err.response?.data?.error || "Failed to start simulation");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleStop = async () => {
     try {
-      await stopSimulation()
-      setSuccess('Simulation stopped')
-      setError(null)
+      await stopSimulation();
+      setSuccess("Simulation stopped");
+      setError(null);
     } catch (err) {
-      setError('Failed to stop simulation')
+      setError("Failed to stop simulation");
     }
-  }
+  };
 
   return (
     <Box>
@@ -182,27 +187,41 @@ function SimulationPanel({ systemInfo }) {
       )}
 
       {success && (
-        <Alert severity="success" sx={{ mb: 2 }} onClose={() => setSuccess(null)}>
+        <Alert
+          severity="success"
+          sx={{ mb: 2 }}
+          onClose={() => setSuccess(null)}
+        >
           {success}
         </Alert>
       )}
 
       {status.isRunning && (
-        <Card sx={{ mb: 2, bgcolor: 'primary.light', color: 'primary.contrastText' }}>
+        <Card
+          sx={{
+            mb: 2,
+            bgcolor: "primary.light",
+            color: "primary.contrastText",
+          }}
+        >
           <CardContent>
-            <Box display="flex" justifyContent="space-between" alignItems="center">
-              <Typography variant="h6">
-                Simulation Running
-              </Typography>
-              <Chip 
-                label={`${status.progress?.current || 0}/${status.progress?.total || 0}`}
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Typography variant="h6">Simulation Running</Typography>
+              <Chip
+                label={`${status.progress?.current || 0}/${
+                  status.progress?.total || 0
+                }`}
                 color="secondary"
               />
             </Box>
             {status.progress && (
-              <LinearProgress 
-                variant="determinate" 
-                value={status.progress.percentage} 
+              <LinearProgress
+                variant="determinate"
+                value={status.progress.percentage}
                 sx={{ mt: 1 }}
               />
             )}
@@ -225,7 +244,9 @@ function SimulationPanel({ systemInfo }) {
                     <Select
                       value={config.protocol}
                       label="Protocol"
-                      onChange={(e) => handleConfigChange('protocol', e.target.value)}
+                      onChange={(e) =>
+                        handleConfigChange("protocol", e.target.value)
+                      }
                     >
                       <MenuItem value="tcp">TCP</MenuItem>
                       <MenuItem value="http">HTTP</MenuItem>
@@ -239,20 +260,26 @@ function SimulationPanel({ systemInfo }) {
                     label="Interval (seconds)"
                     type="number"
                     value={config.interval}
-                    onChange={(e) => handleConfigChange('interval', parseInt(e.target.value))}
+                    onChange={(e) =>
+                      handleConfigChange("interval", parseInt(e.target.value))
+                    }
                     inputProps={{ min: 1 }}
                   />
                 </Grid>
 
-                {config.protocol === 'tcp' ? (
+                {config.protocol === "tcp" ? (
                   <>
                     <Grid item xs={12} sm={8}>
                       <TextField
                         fullWidth
                         label="Host"
                         value={config.host}
-                        onChange={(e) => handleConfigChange('host', e.target.value)}
-                        helperText={systemInfo ? `Device IP: ${systemInfo.defaultIp}` : ''}
+                        onChange={(e) =>
+                          handleConfigChange("host", e.target.value)
+                        }
+                        helperText={
+                          systemInfo ? `Device IP: ${systemInfo.defaultIp}` : ""
+                        }
                       />
                     </Grid>
                     <Grid item xs={12} sm={4}>
@@ -261,7 +288,9 @@ function SimulationPanel({ systemInfo }) {
                         label="Port"
                         type="number"
                         value={config.port}
-                        onChange={(e) => handleConfigChange('port', parseInt(e.target.value))}
+                        onChange={(e) =>
+                          handleConfigChange("port", parseInt(e.target.value))
+                        }
                       />
                     </Grid>
                     <Grid item xs={12}>
@@ -270,7 +299,9 @@ function SimulationPanel({ systemInfo }) {
                         <Select
                           value={config.delimiter}
                           label="Line Delimiter"
-                          onChange={(e) => handleConfigChange('delimiter', e.target.value)}
+                          onChange={(e) =>
+                            handleConfigChange("delimiter", e.target.value)
+                          }
                         >
                           <MenuItem value="\r\n">\r\n (CRLF)</MenuItem>
                           <MenuItem value="\n">\n (LF)</MenuItem>
@@ -286,7 +317,9 @@ function SimulationPanel({ systemInfo }) {
                         fullWidth
                         label="URL"
                         value={config.url}
-                        onChange={(e) => handleConfigChange('url', e.target.value)}
+                        onChange={(e) =>
+                          handleConfigChange("url", e.target.value)
+                        }
                       />
                     </Grid>
                     <Grid item xs={12} sm={4}>
@@ -295,7 +328,9 @@ function SimulationPanel({ systemInfo }) {
                         <Select
                           value={config.method}
                           label="Method"
-                          onChange={(e) => handleConfigChange('method', e.target.value)}
+                          onChange={(e) =>
+                            handleConfigChange("method", e.target.value)
+                          }
                         >
                           <MenuItem value="GET">GET</MenuItem>
                           <MenuItem value="POST">POST</MenuItem>
@@ -309,7 +344,9 @@ function SimulationPanel({ systemInfo }) {
                         multiline
                         rows={3}
                         value={config.headers}
-                        onChange={(e) => handleConfigChange('headers', e.target.value)}
+                        onChange={(e) =>
+                          handleConfigChange("headers", e.target.value)
+                        }
                         placeholder='{"Authorization": "Bearer token", "Content-Type": "application/json"}'
                       />
                     </Grid>
@@ -325,12 +362,30 @@ function SimulationPanel({ systemInfo }) {
                 Packet Input
               </Typography>
 
-              <Tabs value={inputType} onChange={(e, v) => setInputType(v)} sx={{ mb: 2 }}>
-                <Tab label="Text Input" value="text" />
-                <Tab label="File Upload" value="file" />
-              </Tabs>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  mb: 2,
+                }}
+              >
+                <Tabs value={inputType} onChange={(e, v) => setInputType(v)}>
+                  <Tab label="Text Input" value="text" />
+                  <Tab label="File Upload" value="file" />
+                </Tabs>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={convertToBinary}
+                      onChange={(e) => setConvertToBinary(e.target.checked)}
+                    />
+                  }
+                  label="Binary"
+                />
+              </Box>
 
-              {inputType === 'text' ? (
+              {inputType === "text" ? (
                 <TextField
                   fullWidth
                   multiline
@@ -344,7 +399,7 @@ function SimulationPanel({ systemInfo }) {
                 <Box>
                   <input
                     accept=".txt,.js"
-                    style={{ display: 'none' }}
+                    style={{ display: "none" }}
                     id="packet-file-input"
                     type="file"
                     onChange={handleFileChange}
@@ -366,12 +421,13 @@ function SimulationPanel({ systemInfo }) {
                     </Typography>
                   )}
                   <Typography variant="caption" display="block" sx={{ mt: 1 }}>
-                    .js files should export an array: module.exports = ["packet1", "packet2"]
+                    .js files should export an array: module.exports =
+                    ["packet1", "packet2"]
                   </Typography>
                 </Box>
               )}
 
-              <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
+              <Box sx={{ mt: 2, display: "flex", gap: 1 }}>
                 <Button
                   variant="outlined"
                   startIcon={<PreviewIcon />}
@@ -380,15 +436,18 @@ function SimulationPanel({ systemInfo }) {
                 >
                   Preview Packets
                 </Button>
-                
+
                 <Button
                   variant="contained"
                   startIcon={status.isRunning ? <StopIcon /> : <PlayIcon />}
                   onClick={status.isRunning ? handleStop : handleStart}
-                  disabled={loading || (!status.isRunning && !textInput && !selectedFile)}
+                  disabled={
+                    loading ||
+                    (!status.isRunning && !textInput && !selectedFile)
+                  }
                   color={status.isRunning ? "secondary" : "primary"}
                 >
-                  {status.isRunning ? 'Stop Simulation' : 'Start Simulation'}
+                  {status.isRunning ? "Stop Simulation" : "Start Simulation"}
                 </Button>
               </Box>
             </CardContent>
@@ -404,16 +463,23 @@ function SimulationPanel({ systemInfo }) {
                 </Typography>
                 <Typography variant="body2" color="text.secondary" gutterBottom>
                   Total packets: {preview.total}
-                  {preview.preview && ' (showing first 10)'}
+                  {preview.preview && " (showing first 10)"}
                 </Typography>
-                <Paper variant="outlined" sx={{ maxHeight: 300, overflow: 'auto' }}>
+                <Paper
+                  variant="outlined"
+                  sx={{ maxHeight: 300, overflow: "auto" }}
+                >
                   <List dense>
                     {preview.packets.map((packet, index) => (
                       <React.Fragment key={index}>
                         <ListItem>
                           <ListItemText
                             primary={`Packet ${index + 1}`}
-                            secondary={packet.length > 100 ? `${packet.substring(0, 100)}...` : packet}
+                            secondary={
+                              packet.length > 100
+                                ? `${packet.substring(0, 100)}...`
+                                : packet
+                            }
                           />
                         </ListItem>
                         {index < preview.packets.length - 1 && <Divider />}
@@ -427,7 +493,7 @@ function SimulationPanel({ systemInfo }) {
         </Grid>
       </Grid>
     </Box>
-  )
+  );
 }
 
-export default SimulationPanel
+export default SimulationPanel;
