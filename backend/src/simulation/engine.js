@@ -90,9 +90,26 @@ class SimulationEngine extends EventEmitter {
     }
 
     const packet = config.packets[this.packetIndex];
-    const delimiter = config.delimiter || "\r\n";
 
-    this.tcpClient.write(packet + delimiter);
+    // Check if packet is in hex format (binary mode)
+    let dataToSend;
+    if (config.isBinaryMode && /^[0-9a-fA-F]+$/.test(packet)) {
+      // Convert hex string to binary buffer
+      dataToSend = Buffer.from(packet, "hex");
+      console.log(
+        "[DEBUG] Sending as binary buffer. Hex:",
+        packet.substring(0, 30),
+        "| Buffer length:",
+        dataToSend.length
+      );
+    } else {
+      // Send as regular string with delimiter
+      const delimiter = config.delimiter || "\r\n";
+      dataToSend = packet + delimiter;
+      console.log("[DEBUG] Sending as string with delimiter");
+    }
+
+    this.tcpClient.write(dataToSend);
     const msg = `[TCP] Sent packet ${this.packetIndex + 1}/${
       this.totalPackets
     }: ${packet.substring(0, 100)}${packet.length > 100 ? "..." : ""}`;
@@ -145,10 +162,19 @@ class SimulationEngine extends EventEmitter {
       headers: config.headers || {},
     };
 
+    // Check if packet is in hex format (binary mode)
+    let dataToSend = packet;
+    if (config.isBinaryMode && /^[0-9a-fA-F]+$/.test(packet)) {
+      // Convert hex string to binary buffer for HTTP
+      dataToSend = Buffer.from(packet, "hex");
+    }
+
     if (config.method.toUpperCase() === "POST") {
-      axiosConfig.data = packet;
+      axiosConfig.data = dataToSend;
       if (!axiosConfig.headers["Content-Type"]) {
-        axiosConfig.headers["Content-Type"] = "text/plain";
+        axiosConfig.headers["Content-Type"] = config.isBinaryMode
+          ? "application/octet-stream"
+          : "text/plain";
       }
     } else if (config.method.toUpperCase() === "GET") {
       // Append packet as query parameter

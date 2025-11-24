@@ -27,6 +27,7 @@ import SimulationPanel from "./components/SimulationPanel";
 import LogsPanel from "./components/LogsPanel";
 import SettingsPanel from "./components/SettingsPanel";
 import { getSystemInfo } from "./services/api";
+import TeltonikaTools from "./components/TeltonikaTools";
 
 const drawerWidth = 240;
 
@@ -164,6 +165,7 @@ function App() {
           </Container>
         </Box>
       </Box>
+      <TeltonikaTools />
     </ThemeProvider>
   );
 }
