@@ -15,6 +15,8 @@ import {
   Divider,
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import ConcoxLoginPacketGenerator from "./ConcoxLoginPacketGenerator";
+import ConcoxLoginPacketDecoder from "./ConcoxLoginPacketDecoder";
 
 // Helper function to check if string is valid hex
 function isHexString(str) {
@@ -424,6 +426,8 @@ export default function TeltonikaTools() {
     <Stack spacing={4} ml={37} mr={5}>
       <PrefixHexGenerator />
       <TeltonikaPacketSplitter />
+      <ConcoxLoginPacketGenerator />
+      <ConcoxLoginPacketDecoder />
     </Stack>
   );
 }
