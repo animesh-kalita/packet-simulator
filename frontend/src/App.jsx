@@ -29,6 +29,7 @@ import SettingsPanel from "./components/SettingsPanel";
 import { getSystemInfo } from "./services/api";
 import TeltonikaTools from "./components/TeltonikaTools";
 import TeltonikaDecoder from "./components/TeltonikaDecoder";
+import PacketBreakdown from "./components/PacketBreakdown";
 
 const drawerWidth = 240;
 
@@ -168,6 +169,7 @@ function App() {
       </Box>
       <TeltonikaTools />
       <TeltonikaDecoder />
+      <PacketBreakdown />
     </ThemeProvider>
   );
 }
