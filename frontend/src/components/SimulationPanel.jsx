@@ -30,6 +30,12 @@ import {
   Upload as UploadIcon,
   Visibility as PreviewIcon,
 } from "@mui/icons-material";
+import Editor from "react-simple-code-editor";
+import { highlight, languages } from "prismjs/components/prism-core";
+import "prismjs/components/prism-clike";
+import "prismjs/components/prism-javascript";
+import "prismjs/themes/prism.css"; // Example style, can be customized
+
 import {
   getConfig,
   saveConfig,
@@ -110,7 +116,11 @@ function SimulationPanel({ systemInfo }) {
       formData.append("convertToBinary", convertToBinary);
 
       if (inputType === "text") {
-        formData.append("textInput", textInput);
+        const uncommentedInput = textInput
+          .split("\n")
+          .filter((line) => !line.trim().startsWith("//"))
+          .join("\n");
+        formData.append("textInput", uncommentedInput);
       } else if (selectedFile) {
         formData.append("packetFile", selectedFile);
       }
@@ -149,7 +159,11 @@ function SimulationPanel({ systemInfo }) {
       }
 
       if (inputType === "text") {
-        formData.append("textInput", textInput);
+        const uncommentedInput = textInput
+          .split("\n")
+          .filter((line) => !line.trim().startsWith("//"))
+          .join("\n");
+        formData.append("textInput", uncommentedInput);
       } else if (selectedFile) {
         formData.append("packetFile", selectedFile);
       }
@@ -161,6 +175,51 @@ function SimulationPanel({ systemInfo }) {
       setError(err.response?.data?.error || "Failed to start simulation");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "/" && event.ctrlKey) {
+      event.preventDefault();
+      const { selectionStart, selectionEnd, value } = event.target;
+      const lines = value.split("\n");
+      let newText = "";
+
+      const startLine =
+        value.substring(0, selectionStart).split("\n").length - 1;
+      const endLine = value.substring(0, selectionEnd).split("\n").length - 1;
+
+      const linesToModify = lines.slice(startLine, endLine + 1);
+      const allCommented = linesToModify.every((line) =>
+        line.trim().startsWith("//")
+      );
+
+      let modificationDone = false;
+      let newCursorPos = selectionStart;
+
+      if (allCommented) {
+        // Uncomment
+        for (let i = startLine; i <= endLine; i++) {
+          lines[i] = lines[i].replace(/\/\/ ?/, "");
+        }
+        newText = lines.join("\n");
+        newCursorPos = selectionStart - 2 * (endLine - startLine + 1);
+      } else {
+        // Comment
+        for (let i = startLine; i <= endLine; i++) {
+          lines[i] = "// " + lines[i];
+        }
+        newText = lines.join("\n");
+        newCursorPos = selectionStart + 2 * (endLine - startLine + 1);
+      }
+
+      setTextInput(newText);
+
+      // Restore selection
+      setTimeout(() => {
+        event.target.selectionStart = selectionStart;
+        event.target.selectionEnd = selectionEnd;
+      }, 0);
     }
   };
 
@@ -176,6 +235,13 @@ function SimulationPanel({ systemInfo }) {
 
   return (
     <Box>
+      <style>
+        {`
+          .token.comment {
+            color: green !important;
+          }
+        `}
+      </style>
       <Typography variant="h4" gutterBottom>
         Packet Simulation
       </Typography>
@@ -386,15 +452,32 @@ function SimulationPanel({ systemInfo }) {
               </Box>
 
               {inputType === "text" ? (
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={8}
-                  label="Packets (one per line)"
-                  value={textInput}
-                  onChange={(e) => setTextInput(e.target.value)}
-                  placeholder="Enter packets, one per line..."
-                />
+                <Box
+                  sx={{
+                    border: "1px solid #ccc",
+                    borderRadius: "4px",
+                    p: 1,
+                    "&:hover": {
+                      borderColor: "#000",
+                    },
+                    "& .prism-editor-wrapper": {
+                      minHeight: "460px", // approx 8 rows
+                    },
+                  }}
+                >
+                  <Editor
+                    value={textInput}
+                    onValueChange={(code) => setTextInput(code)}
+                    highlight={(code) => highlight(code, languages.js)}
+                    padding={10}
+                    onKeyDown={handleKeyDown}
+                    style={{
+                      fontFamily: '"Fira code", "Fira Mono", monospace',
+                      fontSize: 14,
+                      minHeight: "220px",
+                    }}
+                  />
+                </Box>
               ) : (
                 <Box>
                   <input
