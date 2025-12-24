@@ -27,9 +27,7 @@ import SimulationPanel from "./components/SimulationPanel";
 import LogsPanel from "./components/LogsPanel";
 import SettingsPanel from "./components/SettingsPanel";
 import { getSystemInfo } from "./services/api";
-import TeltonikaTools from "./components/TeltonikaTools";
-import TeltonikaDecoder from "./components/TeltonikaDecoder";
-import PacketBreakdown from "./components/PacketBreakdown";
+import MenuBar from "./components/MenuBar";
 
 const drawerWidth = 240;
 
@@ -165,11 +163,9 @@ function App() {
             )}
             {renderContent()}
           </Container>
+          <MenuBar />
         </Box>
       </Box>
-      <TeltonikaTools />
-      <TeltonikaDecoder />
-      <PacketBreakdown />
     </ThemeProvider>
   );
 }

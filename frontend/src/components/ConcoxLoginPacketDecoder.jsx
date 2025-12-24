@@ -196,7 +196,7 @@ const ConcoxLoginPacketDecoder = () => {
   };
 
   return (
-    <Box sx={{ maxWidth: 700, margin: "40px auto", padding: 2 }}>
+    <Box sx={{ maxWidth: 700, padding: 2 }}>
       <Paper elevation={3} sx={{ padding: 3 }}>
         <Typography variant="h5" gutterBottom>
           Concox Login Packet Decoder

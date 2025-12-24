@@ -489,7 +489,7 @@ export default function TeltonikaDecoder() {
                 variant="outlined"
                 sx={{
                   p: 2,
-                  bgcolor: "secondary.light",
+                  bgcolor: "secondary.main",
                   border: "1px solid",
                   borderColor: "secondary.main",
                   opacity: 0.9,
