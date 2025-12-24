@@ -433,7 +433,7 @@ export default function PacketBreakdown() {
   };
 
   return (
-    <Box sx={{ minHeight: "100vh", py: 3, bgcolor: "#fafafa" }}>
+    <Box sx={{ minHeight: "100vh", py: 3 }}>
       <Container maxWidth="lg">
         <Paper elevation={4} sx={{ p: 3, mb: 4 }}>
           <Typography

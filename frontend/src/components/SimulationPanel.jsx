@@ -48,8 +48,8 @@ import {
 function SimulationPanel({ systemInfo }) {
   const [config, setConfig] = useState({
     protocol: "tcp",
-    host: "127.0.0.1",
-    port: 19999,
+    host: "10.63.46.246",
+    port: 5349,
     url: "http://localhost:3000/api/test",
     method: "POST",
     headers: "{}",
@@ -65,7 +65,7 @@ function SimulationPanel({ systemInfo }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const [convertToBinary, setConvertToBinary] = useState(false);
+  const [convertToBinary, setConvertToBinary] = useState(true);
 
   useEffect(() => {
     loadConfig();

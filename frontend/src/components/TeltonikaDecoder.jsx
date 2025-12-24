@@ -12,6 +12,7 @@ import {
   Alert,
   AlertTitle,
   Stack,
+  Grid2,
 } from "@mui/material";
 
 // Function to replace lucide-react icon with a corresponding MUI icon
@@ -25,6 +26,7 @@ export default function TeltonikaDecoder() {
     "000000000000007a08010000019aed154ee0012b2fee7d0e694e6f00ed00c7140000f01a07ef00f000150545010100b300ca1b0eb50009b6000642300f180000cde77bce14f3430fa34400000900d911ffc412ffb813ffe8c90267cb000003f100009e32c700000000100585704b020b00000000359895a60e00000001641f11020100009ebe"
   );
   const [decodedData, setDecodedData] = useState(null);
+  const [satelliteCount, setSatelliteCount] = useState("");
 
   // --- START: Original Logic Functions (NO CHANGE) ---
 
@@ -160,6 +162,10 @@ export default function TeltonikaDecoder() {
       const din3 = (digitalInputs & 0x04) !== 0;
       const din4 = (digitalInputs & 0x08) !== 0;
 
+      // Get IO69 value
+      const io69Value = ioElements1Byte[69] || 0;
+      const io69 = io69Value === 1;
+
       return {
         codecId,
         numRecords,
@@ -187,6 +193,10 @@ export default function TeltonikaDecoder() {
           din2,
           din3,
           din4,
+        },
+        io69: {
+          value: io69Value,
+          state: io69,
         },
         byteInfo: {
           ioId1Location: findIOId1Location(hex),
@@ -248,18 +258,85 @@ export default function TeltonikaDecoder() {
     }
   };
 
+  const toggleIO69 = () => {
+    try {
+      const hex = hexInput.replace(/\s/g, "");
+      const decoded = decodePacket(hex);
+
+      // Get current IO69 value (from 1-byte elements)
+      const currentIO69Value = decoded.io.elements1Byte[69] || 0;
+
+      // Toggle IO69 value (0 -> 1 or 1 -> 0)
+      const newIO69Value = currentIO69Value === 0 ? 1 : 0;
+      const currentHex = currentIO69Value.toString(16).padStart(2, "0");
+      const newHex = newIO69Value.toString(16).padStart(2, "0");
+
+      // Find and replace the IO element 69 value
+      // Pattern: 45XX where 45 is hex for IO ID 69, XX is the current value
+      const pattern = "45" + currentHex;
+      const replacement = "45" + newHex;
+
+      const newHexString = hex.replace(pattern, replacement);
+      setHexInput(newHexString);
+
+      // Auto-decode the new packet
+      setTimeout(() => {
+        const newDecoded = decodePacket(newHexString);
+        setDecodedData(newDecoded);
+      }, 100);
+    } catch (error) {
+      // Use MUI Alert for the error
+      alert("Error toggling IO69: " + error.message);
+    }
+  };
+
+  const setSatellites = () => {
+    try {
+      const satCount = parseInt(satelliteCount);
+      if (isNaN(satCount) || satCount < 0 || satCount > 255) {
+        alert("Please enter a valid satellite count (0-255)");
+        return;
+      }
+
+      const hex = hexInput.replace(/\s/g, "");
+      const bytes = [];
+      for (let i = 0; i < hex.length; i += 2) {
+        bytes.push(parseInt(hex.substr(i, 2), 16));
+      }
+
+      const satelliteByteOffset = 31;
+
+      // Update the satellite count byte
+      bytes[satelliteByteOffset] = satCount;
+
+      // Convert bytes back to hex string
+      const newHexString = bytes
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("");
+      setHexInput(newHexString);
+
+      // Auto-decode the new packet
+      setTimeout(() => {
+        const newDecoded = decodePacket(newHexString);
+        setDecodedData(newDecoded);
+      }, 100);
+    } catch (error) {
+      alert("Error setting satellite count: " + error.message);
+    }
+  };
+
   // --- END: Original Logic Functions (NO CHANGE) ---
 
   // Helper component to render key/value pairs
   const DataRow = ({ label, value }) => (
-    <Grid item xs={12} sm={6}>
+    <Grid2 item xs={12} sm={6}>
       <Typography variant="body2" component="span" fontWeight="medium">
         {label}:
       </Typography>
       <Typography variant="body2" component="span" sx={{ ml: 1 }}>
         {value}
       </Typography>
-    </Grid>
+    </Grid2>
   );
 
   return (
@@ -296,14 +373,42 @@ export default function TeltonikaDecoder() {
             />
           </Box>
 
-          <Stack direction="row" spacing={2}>
+          <Stack direction="row" spacing={2} mb={2} flexWrap="wrap" useFlexGap>
             <Button onClick={handleDecode} variant="contained" color="primary">
               Decode Packet
             </Button>
             <Button onClick={toggleDIN1} variant="contained" color="success">
               Toggle DIN1
             </Button>
+            <Button onClick={toggleIO69} variant="contained" color="secondary">
+              Toggle IO69
+            </Button>
           </Stack>
+
+          {/* Satellite Count Control */}
+          <Box sx={{ mt: 2, p: 2, borderRadius: 1 }}>
+            <Typography variant="subtitle2" gutterBottom>
+              Set Satellite Count
+            </Typography>
+            <Stack direction="row" spacing={2} alignItems="center">
+              <TextField
+                value={satelliteCount}
+                onChange={(e) => setSatelliteCount(e.target.value)}
+                placeholder="Enter count (0-255)"
+                variant="outlined"
+                size="small"
+                type="number"
+                inputProps={{
+                  min: 0,
+                  max: 255,
+                  style: { width: "150px" },
+                }}
+              />
+              <Button onClick={setSatellites} variant="contained" color="info">
+                Set Satellites
+              </Button>
+            </Stack>
+          </Box>
         </Paper>
 
         {/* Decoded Data Output */}
@@ -339,14 +444,14 @@ export default function TeltonikaDecoder() {
                 >
                   Digital Inputs
                 </Typography>
-                <Grid container spacing={1} sx={{ fontSize: "0.875rem" }}>
+                <Grid2 container spacing={1} sx={{ fontSize: "0.875rem" }}>
                   {[
                     { key: "din1", label: "DIN1" },
                     { key: "din2", label: "DIN2" },
                     { key: "din3", label: "DIN3" },
                     { key: "din4", label: "DIN4" },
                   ].map(({ key, label }) => (
-                    <Grid item xs={6} key={key}>
+                    <Grid2 item xs={6} key={key}>
                       <Box
                         sx={{
                           p: 1,
@@ -366,9 +471,9 @@ export default function TeltonikaDecoder() {
                           {decodedData.digitalInputs[key] ? "TRUE" : "FALSE"}
                         </Typography>
                       </Box>
-                    </Grid>
+                    </Grid2>
                   ))}
-                </Grid>
+                </Grid2>
                 <Typography
                   variant="caption"
                   color="text.secondary"
@@ -376,6 +481,57 @@ export default function TeltonikaDecoder() {
                 >
                   Raw value: 0x
                   {decodedData.digitalInputs.raw.toString(16).padStart(2, "0")}
+                </Typography>
+              </Paper>
+
+              {/* IO69 Card */}
+              <Paper
+                variant="outlined"
+                sx={{
+                  p: 2,
+                  bgcolor: "secondary.light",
+                  border: "1px solid",
+                  borderColor: "secondary.main",
+                  opacity: 0.9,
+                }}
+              >
+                <Typography
+                  variant="subtitle1"
+                  fontWeight="semibold"
+                  color="text.primary"
+                  mb={1}
+                >
+                  IO Element 69
+                </Typography>
+                <Grid2 container spacing={1} sx={{ fontSize: "0.875rem" }}>
+                  <Grid2 item xs={12}>
+                    <Box
+                      sx={{
+                        p: 1,
+                        borderRadius: 1,
+                        bgcolor: decodedData.io69.state
+                          ? "success.main"
+                          : "error.main",
+                        color: "white",
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography variant="body2" fontWeight="medium">
+                        IO69:
+                      </Typography>
+                      <Typography variant="body2">
+                        {decodedData.io69.state ? "TRUE (1)" : "FALSE (0)"}
+                      </Typography>
+                    </Box>
+                  </Grid2>
+                </Grid2>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ mt: 1, display: "block" }}
+                >
+                  Raw value: {decodedData.io69.value}
                 </Typography>
               </Paper>
 
@@ -398,7 +554,7 @@ export default function TeltonikaDecoder() {
                 >
                   GPS Data
                 </Typography>
-                <Grid container spacing={1}>
+                <Grid2 container spacing={1}>
                   <DataRow
                     label="Latitude"
                     value={`${decodedData.gps.latitude}°`}
@@ -420,7 +576,7 @@ export default function TeltonikaDecoder() {
                     label="Satellites"
                     value={decodedData.gps.satellites}
                   />
-                </Grid>
+                </Grid2>
               </Paper>
 
               {/* Packet Info Card */}
@@ -549,7 +705,18 @@ export default function TeltonikaDecoder() {
               Click **Toggle DIN1** to change Digital Input 1 from FALSE to TRUE
               (or vice versa)
             </li>
-            <li>The hex string will be automatically updated</li>
+            <li>
+              Click **Toggle IO69** to change IO element 69 from 0 to 1 (or vice
+              versa)
+            </li>
+            <li>
+              Enter a satellite count (0-255) and click **Set Satellites** to
+              update the GPS satellite count
+            </li>
+            <li>
+              The hex string will be automatically updated after each
+              modification
+            </li>
             <li>Copy the modified hex string to send to your device</li>
           </Box>
         </Alert>
