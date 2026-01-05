@@ -15,11 +15,8 @@ import {
   Grid2,
 } from "@mui/material";
 
-// Function to replace lucide-react icon with a corresponding MUI icon
-// Since the prompt explicitly used AlertCircle from lucide, we'll map it.
 import MuiAlertCircle from "@mui/icons-material/InfoOutlined";
-// Note: If you want to use the lucide icon style, you'd need the @mui/icons-material and @mui/material/SvgIcon imports
-// and a custom component, but for simplicity and using built-in MUI components, InfoOutlined is a good replacement.
+import { updateHexTimestamp } from "../utilities/teltonikaUtils";
 
 export default function TeltonikaDecoder() {
   const [hexInput, setHexInput] = useState(
@@ -27,6 +24,7 @@ export default function TeltonikaDecoder() {
   );
   const [decodedData, setDecodedData] = useState(null);
   const [satelliteCount, setSatelliteCount] = useState("");
+  const [epochInput, setEpochInput] = useState(""); // New state for Epoch input
 
   // --- START: Original Logic Functions (NO CHANGE) ---
 
@@ -327,6 +325,28 @@ export default function TeltonikaDecoder() {
 
   // --- END: Original Logic Functions (NO CHANGE) ---
 
+  // New function to handle timestamp replacement
+  const handleSetTimestamp = () => {
+    try {
+      const epoch = parseInt(epochInput);
+      if (isNaN(epoch)) {
+        alert("Please enter a valid epoch timestamp (milliseconds)");
+        return;
+      }
+
+      const newHexString = updateHexTimestamp(hexInput, epoch);
+      setHexInput(newHexString);
+
+      // Auto-decode the new packet
+      setTimeout(() => {
+        const newDecoded = decodePacket(newHexString);
+        setDecodedData(newDecoded);
+      }, 100);
+    } catch (error) {
+      alert("Error setting timestamp: " + error.message);
+    }
+  };
+
   // Helper component to render key/value pairs
   const DataRow = ({ label, value }) => (
     <Grid2 item xs={12} sm={6}>
@@ -385,30 +405,62 @@ export default function TeltonikaDecoder() {
             </Button>
           </Stack>
 
-          {/* Satellite Count Control */}
-          <Box sx={{ mt: 2, p: 2, borderRadius: 1 }}>
-            <Typography variant="subtitle2" gutterBottom>
-              Set Satellite Count
-            </Typography>
-            <Stack direction="row" spacing={2} alignItems="center">
-              <TextField
-                value={satelliteCount}
-                onChange={(e) => setSatelliteCount(e.target.value)}
-                placeholder="Enter count (0-255)"
-                variant="outlined"
-                size="small"
-                type="number"
-                inputProps={{
-                  min: 0,
-                  max: 255,
-                  style: { width: "150px" },
-                }}
-              />
-              <Button onClick={setSatellites} variant="contained" color="info">
-                Set Satellites
-              </Button>
-            </Stack>
-          </Box>
+          {/* Controls Section */}
+          <Grid2 container spacing={2} sx={{ mt: 2 }}>
+            {/* Satellite Count Control */}
+            <Grid2 item xs={12} md={6}>
+              <Box sx={{ p: 2, borderRadius: 1, border: "1px solid #e0e0e0" }}>
+                <Typography variant="subtitle2" gutterBottom>
+                  Set Satellite Count
+                </Typography>
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <TextField
+                    fullWidth
+                    value={satelliteCount}
+                    onChange={(e) => setSatelliteCount(e.target.value)}
+                    placeholder="0-255"
+                    variant="outlined"
+                    size="small"
+                    type="number"
+                  />
+                  <Button
+                    onClick={setSatellites}
+                    variant="contained"
+                    color="info"
+                  >
+                    Set
+                  </Button>
+                </Stack>
+              </Box>
+            </Grid2>
+
+            {/* Timestamp Control */}
+            <Grid2 item xs={12} md={6}>
+              <Box sx={{ p: 2, borderRadius: 1, border: "1px solid #e0e0e0" }}>
+                <Typography variant="subtitle2" gutterBottom>
+                  Manipulate Epoch Timestamp (ms)
+                </Typography>
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <TextField
+                    fullWidth
+                    value={epochInput}
+                    onChange={(e) => setEpochInput(e.target.value)}
+                    placeholder="e.g. 1764929883872"
+                    variant="outlined"
+                    size="small"
+                    type="number"
+                  />
+                  <Button
+                    onClick={handleSetTimestamp}
+                    variant="contained"
+                    color="warning"
+                  >
+                    Replace
+                  </Button>
+                </Stack>
+              </Box>
+            </Grid2>
+          </Grid2>
         </Paper>
 
         {/* Decoded Data Output */}
@@ -714,10 +766,13 @@ export default function TeltonikaDecoder() {
               update the GPS satellite count
             </li>
             <li>
+              Enter a Unix Epoch in milliseconds (like 1764929883872) and click
+              **Replace** to update the packet time
+            </li>
+            <li>
               The hex string will be automatically updated after each
               modification
             </li>
-            <li>Copy the modified hex string to send to your device</li>
           </Box>
         </Alert>
       </Container>

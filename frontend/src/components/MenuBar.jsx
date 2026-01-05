@@ -6,6 +6,8 @@ import TeltonikaDecoder from "./TeltonikaDecoder";
 import PacketBreakdown from "./PacketBreakdown";
 import ConcoxLoginPacketGenerator from "./ConcoxLoginPacketGenerator";
 import ConcoxLoginPacketDecoder from "./ConcoxLoginPacketDecoder";
+import APMDecoder from "./APMDecoder";
+import SinocastelDecoder from "./SinocastelDecoder";
 
 const MenuBar = () => {
   const [value, setValue] = useState(0);
@@ -17,8 +19,9 @@ const MenuBar = () => {
   const menus = [
     "teltonika",
     "concox",
-    "ais140",
     "apm_rma_201",
+    "sinocastel",
+    "ais140",
     "apm_rmi_204",
     "bharat101",
     // "dashcam",
@@ -28,7 +31,6 @@ const MenuBar = () => {
     // "navtelecom",
     // "pioneer",
     // "queclink",
-    // "sinocastel",
     // "transight",
     // Add more menu items here easily
   ];
@@ -48,6 +50,18 @@ const MenuBar = () => {
           <>
             <ConcoxLoginPacketGenerator />
             <ConcoxLoginPacketDecoder />
+          </>
+        );
+      case "apm_rma_201":
+        return (
+          <>
+            <APMDecoder />
+          </>
+        );
+      case "sinocastel":
+        return (
+          <>
+            <SinocastelDecoder />
           </>
         );
 
