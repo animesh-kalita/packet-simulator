@@ -8,6 +8,7 @@ import ConcoxLoginPacketGenerator from "./ConcoxLoginPacketGenerator";
 import ConcoxLoginPacketDecoder from "./ConcoxLoginPacketDecoder";
 import APMDecoder from "./APMDecoder";
 import SinocastelDecoder from "./SinocastelDecoder";
+import Bharat101Builder from "../bharat101/Bharat101Builder";
 
 const MenuBar = () => {
   const [value, setValue] = useState(0);
@@ -62,6 +63,12 @@ const MenuBar = () => {
         return (
           <>
             <SinocastelDecoder />
+          </>
+        );
+      case "bharat101":
+        return (
+          <>
+            <Bharat101Builder />
           </>
         );
 
