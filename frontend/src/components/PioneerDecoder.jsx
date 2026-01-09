@@ -526,13 +526,11 @@ export default function PioneerDecoder() {
   const styles = {
     container: {
       minHeight: "100vh",
-      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
       padding: "24px",
     },
     paper: {
       maxWidth: "1400px",
       margin: "0 auto",
-      background: "white",
       borderRadius: "12px",
       boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
       padding: "32px",
