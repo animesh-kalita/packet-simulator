@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import PioneerBlePacketGenerator from "./Pioneer/PioneerBlePacketGenerator";
 import PioneerPositionPacketGenerator from "./Pioneer/PioneerPositionPacketGenerator";
 import PioneerPositionDecoder from "./Pioneer/PioneerPositionDecoder";
+import AlarmDecoder from "./Pioneer/AlarmDecoder";
 
 // Pioneer Protocol Field Definitions
 const PIONEER_FIELDS = [
@@ -734,6 +735,15 @@ export default function PioneerDecoder() {
           >
             BLE 0x250x250x13 - Decoder
           </button>
+          <button
+            onClick={() => setTabValue(6)}
+            style={{
+              ...styles.tab,
+              ...(tabValue === 6 ? styles.tabActive : styles.tabInactive),
+            }}
+          >
+            Alarm 0x250x250x14
+          </button>
         </div>
 
         {tabValue === 0 && (
@@ -865,6 +875,7 @@ export default function PioneerDecoder() {
         {tabValue === 3 && <PioneerBlePacketGenerator />}
         {tabValue === 4 && <PioneerPositionPacketGenerator />}
         {tabValue === 5 && <PioneerPositionDecoder />}
+        {tabValue === 6 && <AlarmDecoder />}
       </div>
     </div>
   );
