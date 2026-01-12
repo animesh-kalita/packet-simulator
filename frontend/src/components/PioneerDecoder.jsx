@@ -8,6 +8,9 @@ import DriverBehaviourDecoder from "./Pioneer/DriverBehaviourDecoder";
 import DriverBehaviorDecoder0x06 from "./Pioneer/DriverBehaviorDecoder0x06";
 import AccidentDecoder from "./Pioneer/AccidentDecoder";
 import BleDecoder from "./Pioneer/BleDecoderx10";
+import BleLocationDecoder from "./Pioneer/BleLocationDecoder";
+import ManualCanDecoder from "./Pioneer/ManualCanDecoder";
+import PioneerXPositionDecoder from "./Pioneer/PioneerXPositionDecoder";
 
 /* =====================
    Tab Panel Helper
@@ -52,6 +55,9 @@ export default function PioneerDecoder() {
           <Tab label="Driver Behaviour 0x25 0x25 0x06" />
           <Tab label="Accident 0x25 0x25 0x07" />
           <Tab label="BLE 0x10-Updated" />
+          <Tab label="BLE 0x12" />
+          <Tab label="Manual CAN - 0x44" />
+          <Tab label="Pioneer X Position - 25x25x34" />
         </Tabs>
 
         <TabPanel value={tabValue} index={0}>
@@ -77,6 +83,15 @@ export default function PioneerDecoder() {
         </TabPanel>
         <TabPanel value={tabValue} index={6}>
           <BleDecoder />
+        </TabPanel>
+        <TabPanel value={tabValue} index={7}>
+          <BleLocationDecoder />
+        </TabPanel>
+        <TabPanel value={tabValue} index={8}>
+          <ManualCanDecoder />
+        </TabPanel>
+        <TabPanel value={tabValue} index={9}>
+          <PioneerXPositionDecoder />
         </TabPanel>
       </Paper>
     </Box>
