@@ -14,6 +14,7 @@ import PioneerXPositionDecoder from "./Pioneer/PioneerXPositionDecoder";
 import PioneerXAlarmDecoder from "./Pioneer/PioneerXAlarmDecoder";
 import LoginDecoder from "./Pioneer/LoginDecoder";
 import HeartbeatDecoder from "./Pioneer/HeartbeatDecoder";
+import BleMessageDecoder from "./Pioneer/BleMessageDecoder";
 
 /* =====================
    Tab Panel Helper
@@ -64,6 +65,7 @@ export default function PioneerDecoder() {
           <Tab label="Pioneer X Alarm - 25x25x34" />
           <Tab label="Login Message (from Device) (0x250x250x01)" />
           <Tab label="Heartbeat Message (from Device) (0x250x250x03)" />
+          <Tab label="BLE Message (from Device) (0x250x250x10)" />
         </Tabs>
 
         <TabPanel value={tabValue} index={0}>
@@ -107,6 +109,9 @@ export default function PioneerDecoder() {
         </TabPanel>
         <TabPanel value={tabValue} index={12}>
           <HeartbeatDecoder />
+        </TabPanel>
+        <TabPanel value={tabValue} index={13}>
+          <BleMessageDecoder />
         </TabPanel>
       </Paper>
     </Box>
