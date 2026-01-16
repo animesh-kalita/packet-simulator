@@ -10,6 +10,7 @@ import APMDecoder from "./APMDecoder";
 import SinocastelDecoder from "./SinocastelDecoder";
 import Bharat101Builder from "../bharat101/Bharat101Builder";
 import PioneerDecoder from "./PioneerDecoder";
+import SimpleNavtelecomTabs from "./Navtelecom/SimpleNavtelecomTabs";
 
 const MenuBar = () => {
   const [value, setValue] = useState(0);
@@ -27,11 +28,11 @@ const MenuBar = () => {
     "apm_rmi_204",
     "bharat101",
     "pioneer",
+    "navtelecom",
     // "dashcam",
     // "jimi_vl110c",
     // "jimi_vl502",
     // "mettax",
-    // "navtelecom",
     // "queclink",
     // "transight",
     // Add more menu items here easily
@@ -78,6 +79,12 @@ const MenuBar = () => {
             {/* <PioneerPacketBuilder /> */}
             {/* <PioneerPositionDecoder /> */}
             <PioneerDecoder />
+          </>
+        );
+      case "navtelecom":
+        return (
+          <>
+            <SimpleNavtelecomTabs />
           </>
         );
 

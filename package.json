@@ -23,7 +23,18 @@
   "devDependencies": {
     "concurrently": "^9.0.1"
   },
-  "keywords": ["packet", "simulator", "tcp", "http", "device", "iot", "testing"],
+  "keywords": [
+    "packet",
+    "simulator",
+    "tcp",
+    "http",
+    "device",
+    "iot",
+    "testing"
+  ],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "lucide-react": "^0.562.0"
+  }
 }
