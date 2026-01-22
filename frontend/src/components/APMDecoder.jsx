@@ -12,7 +12,7 @@ import {
 
 export default function APMDecoder() {
   const [rawInput, setRawInput] = useState(
-    "$,10,APMK,1.1,V4.0.1,NR,21,L,862942074967324,XY45DX3423,1,23122025,221130,13.058557,N,77.440029,E,0.0,224.90,20,778.9,1.6,0.7,AIRTEL,0,1,23.4,4.1,0,19,0000,00,0.00,0.00,610770,00000000,02:01150D04|FFFFFFFF,02:FFFFFFFF|FFFFFFFF,7E,*"
+    "$,10,APMK,1.1,V4.0.1,NR,21,L,862942074967324,XY45DX3423,1,23122025,221130,13.058557,N,77.440029,E,0.0,224.90,20,778.9,1.6,0.7,AIRTEL,0,1,23.4,4.1,0,19,0000,00,0.00,0.00,610770,00000000,02:01150D04|FFFFFFFF,02:FFFFFFFF|FFFFFFFF,7E,*",
   );
 
   const [decoded, setDecoded] = useState(null);
@@ -20,36 +20,6 @@ export default function APMDecoder() {
 
   // ------------------ Decoder ------------------
 
-  //   const decodeAPM = (packet) => {
-  //     const clean = packet.trim();
-  //     const parts = clean.split(",");
-
-  //     if (parts.length < 20) {
-  //       throw new Error("Invalid / incomplete APM packet");
-  //     }
-
-  //     return {
-  //       header: parts[0],
-  //       protocolId: parts[2],
-  //       protocolVersion: parts[3],
-  //       firmware: parts[4],
-  //       imei: parts[8],
-  //       deviceId: parts[9],
-  //       date: parts[11], // DDMMYYYY
-  //       time: parts[12], // HHMMSS
-  //       latitude: `${parts[13]} ${parts[14]}`,
-  //       longitude: `${parts[15]} ${parts[16]}`,
-  //       speed: parts[17],
-  //       heading: parts[18],
-  //       satellites: parts[19],
-  //       altitude: parts[20],
-  //       hdop: parts[21],
-  //       network: parts[22],
-  //       batteryVoltage: parts[25],
-  //       externalVoltage: parts[26],
-  //       rawParts: parts,
-  //     };
-  //   };
   const decodeAPM = (packet) => {
     const clean = packet.trim();
     const parts = clean.split(",");
@@ -139,7 +109,7 @@ export default function APMDecoder() {
   // ------------------ UI ------------------
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "#fafafa", py: 3 }}>
+    <Box sx={{ minHeight: "100vh", py: 3 }}>
       <Container maxWidth="md">
         <Paper sx={{ p: 3, mb: 3 }}>
           <Typography variant="h6" fontWeight="bold" gutterBottom>
