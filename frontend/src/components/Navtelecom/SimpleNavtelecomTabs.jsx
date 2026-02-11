@@ -9,6 +9,7 @@ import NavtelecomFlexDecoderExtended from "./NavtelecomFlexDecoderExtended";
 import NavtelecomFlexDecoderFull from "./NavtelecomFlexDecoder_Full";
 import NavtelecomImeiEncoderDecoder from "./NavtelecomIMEI-encode-decode";
 import FlexMaskDecoder from "./FlexMaskDecoder";
+import NavtelecomFlexConfigurator from "./Navtelecomflexconfigurator";
 
 export default function SimpleNavtelecomTabs() {
   const [tab, setTab] = useState(0);
@@ -25,6 +26,7 @@ export default function SimpleNavtelecomTabs() {
         <Tab label="Navtelecom Flex Full" />
         <Tab label="Navtelecom IMEI" />
         <Tab label="Flex Mask Decoder" />
+        <Tab label="Navtelecom Flex Configurator" />
         {/* Add more <Tab /> here when needed */}
       </Tabs>
 
@@ -38,6 +40,7 @@ export default function SimpleNavtelecomTabs() {
         {tab === 6 && <NavtelecomFlexDecoderFull />}
         {tab === 7 && <NavtelecomImeiEncoderDecoder />}
         {tab === 8 && <FlexMaskDecoder />}
+        {tab === 9 && <NavtelecomFlexConfigurator />}
 
         {/* Add more conditions when adding tabs */}
       </Box>
