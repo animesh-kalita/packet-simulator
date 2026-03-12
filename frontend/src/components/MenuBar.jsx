@@ -12,6 +12,7 @@ import Bharat101Builder from "../bharat101/Bharat101Builder";
 import PioneerDecoder from "./PioneerDecoder";
 import SimpleNavtelecomTabs from "./Navtelecom/SimpleNavtelecomTabs";
 import SimpleRMA201Tabs from "./Apm_RMA_201/SimpleRMA201Tabs";
+import CastelPacketLab from "./Sinocastel/CastelPacketLab";
 
 const MenuBar = () => {
   const [value, setValue] = useState(0);
@@ -65,7 +66,8 @@ const MenuBar = () => {
       case "sinocastel":
         return (
           <>
-            <SinocastelDecoder />
+            {/* <SinocastelDecoder /> */}
+            <CastelPacketLab />
           </>
         );
       case "bharat101":
