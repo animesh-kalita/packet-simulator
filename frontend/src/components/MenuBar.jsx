@@ -13,6 +13,7 @@ import PioneerDecoder from "./PioneerDecoder";
 import SimpleNavtelecomTabs from "./Navtelecom/SimpleNavtelecomTabs";
 import SimpleRMA201Tabs from "./Apm_RMA_201/SimpleRMA201Tabs";
 import CastelPacketLab from "./Sinocastel/CastelPacketLab";
+import EventFlagTool from "./EventFlag";
 
 const MenuBar = () => {
   const [value, setValue] = useState(0);
@@ -22,6 +23,7 @@ const MenuBar = () => {
   };
 
   const menus = [
+    "event_flag",
     "teltonika",
     "concox",
     "apm_rma_201",
@@ -90,6 +92,8 @@ const MenuBar = () => {
             <SimpleNavtelecomTabs />
           </>
         );
+      case "event_flag":
+        return <EventFlagTool />;
 
       // case "queclink":
       //   return <QueclinkTools />;
