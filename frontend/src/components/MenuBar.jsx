@@ -14,6 +14,8 @@ import SimpleNavtelecomTabs from "./Navtelecom/SimpleNavtelecomTabs";
 import SimpleRMA201Tabs from "./Apm_RMA_201/SimpleRMA201Tabs";
 import CastelPacketLab from "./Sinocastel/CastelPacketLab";
 import EventFlagTool from "./EventFlag";
+import SinocastelPacketViewer from "./Sinocastel/SinocastelPacketViewer";
+import SinocastelRawPacketViewer from "./Sinocastel/SinocastelRawPacketViewer";
 
 const MenuBar = () => {
   const [value, setValue] = useState(0);
@@ -70,6 +72,8 @@ const MenuBar = () => {
           <>
             {/* <SinocastelDecoder /> */}
             <CastelPacketLab />
+            {/* <SinocastelPacketViewer /> */}
+            <SinocastelRawPacketViewer />
           </>
         );
       case "bharat101":
