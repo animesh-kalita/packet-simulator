@@ -16,6 +16,7 @@ import CastelPacketLab from "./Sinocastel/CastelPacketLab";
 import EventFlagTool from "./EventFlag";
 import SinocastelPacketViewer from "./Sinocastel/SinocastelPacketViewer";
 import SinocastelRawPacketViewer from "./Sinocastel/SinocastelRawPacketViewer";
+import App from "./PioneerEducational/src/App";
 
 const MenuBar = () => {
   const [value, setValue] = useState(0);
@@ -34,6 +35,7 @@ const MenuBar = () => {
     "apm_rmi_204",
     "bharat101",
     "pioneer",
+    "pioneer-educational",
     "navtelecom",
     // "dashcam",
     // "jimi_vl110c",
@@ -88,6 +90,14 @@ const MenuBar = () => {
             {/* <PioneerPacketBuilder /> */}
             {/* <PioneerPositionDecoder /> */}
             <PioneerDecoder />
+          </>
+        );
+      case "pioneer-educational":
+        return (
+          <>
+            {/* <PioneerPacketBuilder /> */}
+            {/* <PioneerPositionDecoder /> */}
+            <App />
           </>
         );
       case "navtelecom":
