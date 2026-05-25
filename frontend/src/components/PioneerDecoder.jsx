@@ -35,13 +35,13 @@ export default function PioneerDecoder() {
   };
 
   return (
-    <Box p={3}>
-      <Paper elevation={3} sx={{ p: 3 }}>
-        <Typography variant="h4" gutterBottom>
+    <Paper variant="outlined" sx={{ borderRadius: 1, overflow: 'hidden' }}>
+      <Box sx={{ p: { xs: 1.5, sm: 2.5 } }}>
+        <Typography variant="h6" fontWeight={700} gutterBottom>
           Pioneer Protocol Tools
         </Typography>
 
-        <Typography variant="body2" color="text.secondary" gutterBottom>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           BLE packets, position decoding, alarms and driver behaviour
         </Typography>
 
@@ -50,36 +50,33 @@ export default function PioneerDecoder() {
           onChange={handleChange}
           variant="scrollable"
           scrollButtons="auto"
-          sx={{ mb: 2 }}
+          sx={{ mb: 2, minHeight: 0, '& .MuiTab-root': { textTransform: 'none', fontSize: '0.8rem', py: 1 } }}
         >
           <Tab label="BLE 0x25 0x25 0x10" />
-          <Tab label="Position Packet - 0x25 0x25 0x13 " />
+          <Tab label="Position 0x25 0x25 0x13" />
           <Tab label="Alarm 0x25 0x25 0x14" />
-          <Tab label="Driver Behaviour 0x25 0x25 0x05" />
-          <Tab label="Driver Behaviour 0x25 0x25 0x06" />
+          <Tab label="Driver Beh. 0x25 0x25 0x05" />
+          <Tab label="Driver Beh. 0x25 0x25 0x06" />
           <Tab label="Accident 0x25 0x25 0x07" />
-          <Tab label="BLE 0x10-Updated" />
+          <Tab label="BLE 0x10 Updated" />
           <Tab label="BLE 0x12" />
-          <Tab label="Manual CAN - 0x44" />
-          <Tab label="Pioneer X Position - 25x25x33" />
-          <Tab label="Pioneer X Alarm - 25x25x34" />
-          <Tab label="Login Message (from Device) (0x250x250x01)" />
-          <Tab label="Heartbeat Message (from Device) (0x250x250x03)" />
-          <Tab label="BLE Message (from Device) (0x250x250x10)" />
+          <Tab label="Manual CAN 0x44" />
+          <Tab label="X Position 0x33" />
+          <Tab label="X Alarm 0x34" />
+          <Tab label="Login 0x01" />
+          <Tab label="Heartbeat 0x03" />
+          <Tab label="BLE Msg 0x10" />
         </Tabs>
 
         <TabPanel value={tabValue} index={0}>
           <PioneerBlePacketGenerator />
         </TabPanel>
-
         <TabPanel value={tabValue} index={1}>
           <PioneerPositionDecoder />
         </TabPanel>
-
         <TabPanel value={tabValue} index={2}>
           <AlarmDecoder />
         </TabPanel>
-
         <TabPanel value={tabValue} index={3}>
           <DriverBehaviourDecoder />
         </TabPanel>
@@ -113,7 +110,7 @@ export default function PioneerDecoder() {
         <TabPanel value={tabValue} index={13}>
           <BleMessageDecoder />
         </TabPanel>
-      </Paper>
-    </Box>
+      </Box>
+    </Paper>
   );
 }
