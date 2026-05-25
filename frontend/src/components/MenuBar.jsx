@@ -17,6 +17,7 @@ import EventFlagTool from "./EventFlag";
 import SinocastelPacketViewer from "./Sinocastel/SinocastelPacketViewer";
 import SinocastelRawPacketViewer from "./Sinocastel/SinocastelRawPacketViewer";
 import App from "./PioneerEducational/src/App";
+import UniversalConverter from "./UniversalConverter/UniversalConverter";
 
 const MenuBar = () => {
   const [value, setValue] = useState(0);
@@ -36,6 +37,7 @@ const MenuBar = () => {
     "bharat101",
     "pioneer",
     "pioneer-educational",
+    "universal-converter",
     "navtelecom",
     // "dashcam",
     // "jimi_vl110c",
@@ -92,6 +94,8 @@ const MenuBar = () => {
             <PioneerDecoder />
           </>
         );
+      case "universal-converter":
+        return <UniversalConverter />;
       case "pioneer-educational":
         return (
           <>
