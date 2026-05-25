@@ -1,5 +1,5 @@
 export function hexToRgb(hex) {
-  const clean = hex.replace(/^#/, '').trim();
+  const clean = hex.replace(/^#/, "").trim();
   let fullHex;
   if (clean.length === 3) {
     fullHex = clean[0] + clean[0] + clean[1] + clean[1] + clean[2] + clean[2];
@@ -12,11 +12,11 @@ export function hexToRgb(hex) {
   }
   const num = parseInt(fullHex, 16);
   if (isNaN(num)) return null;
-  return { r: (num >> 16) & 0xFF, g: (num >> 8) & 0xFF, b: num & 0xFF, a: 1 };
+  return { r: (num >> 16) & 0xff, g: (num >> 8) & 0xff, b: num & 0xff, a: 1 };
 }
 
 export function hexToRgba(hex) {
-  const clean = hex.replace(/^#/, '').trim();
+  const clean = hex.replace(/^#/, "").trim();
   if (clean.length !== 8) {
     const rgb = hexToRgb(hex);
     return rgb ? { ...rgb, a: 1 } : null;
@@ -24,27 +24,45 @@ export function hexToRgba(hex) {
   const num = parseInt(clean, 16);
   if (isNaN(num)) return null;
   return {
-    r: (num >> 24) & 0xFF,
-    g: (num >> 16) & 0xFF,
-    b: (num >> 8) & 0xFF,
-    a: ((num & 0xFF) / 255).toFixed(2),
+    r: (num >> 24) & 0xff,
+    g: (num >> 16) & 0xff,
+    b: (num >> 8) & 0xff,
+    a: ((num & 0xff) / 255).toFixed(2),
   };
 }
 
 export function rgbToHex(r, g, b) {
-  return '#' + [r, g, b].map(c => Math.max(0, Math.min(255, Math.round(c))).toString(16).padStart(2, '0')).join('').toUpperCase();
+  return (
+    "#" +
+    [r, g, b]
+      .map((c) =>
+        Math.max(0, Math.min(255, Math.round(c)))
+          .toString(16)
+          .padStart(2, "0"),
+      )
+      .join("")
+      .toUpperCase()
+  );
 }
 
 export function rgbaToHex(r, g, b, a) {
   const hex = rgbToHex(r, g, b);
-  const alpha = Math.max(0, Math.min(255, Math.round(a * 255))).toString(16).padStart(2, '0').toUpperCase();
+  const alpha = Math.max(0, Math.min(255, Math.round(a * 255)))
+    .toString(16)
+    .padStart(2, "0")
+    .toUpperCase();
   return hex + alpha;
 }
 
 export function rgbToHsl(r, g, b) {
-  r /= 255; g /= 255; b /= 255;
-  const max = Math.max(r, g, b), min = Math.min(r, g, b);
-  let h, s, l = (max + min) / 2;
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const max = Math.max(r, g, b),
+    min = Math.min(r, g, b);
+  let h,
+    s,
+    l = (max + min) / 2;
 
   if (max === min) {
     h = s = 0;
@@ -52,9 +70,15 @@ export function rgbToHsl(r, g, b) {
     const d = max - min;
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
     switch (max) {
-      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
-      case g: h = ((b - r) / d + 2) / 6; break;
-      case b: h = ((r - g) / d + 4) / 6; break;
+      case r:
+        h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+        break;
+      case g:
+        h = ((b - r) / d + 2) / 6;
+        break;
+      case b:
+        h = ((r - g) / d + 4) / 6;
+        break;
     }
   }
 
@@ -66,7 +90,9 @@ export function rgbToHsl(r, g, b) {
 }
 
 export function hslToRgb(h, s, l) {
-  h /= 360; s /= 100; l /= 100;
+  h /= 360;
+  s /= 100;
+  l /= 100;
   let r, g, b;
 
   if (s === 0) {
@@ -75,16 +101,16 @@ export function hslToRgb(h, s, l) {
     const hue2rgb = (p, q, t) => {
       if (t < 0) t += 1;
       if (t > 1) t -= 1;
-      if (t < 1/6) return p + (q - p) * 6 * t;
-      if (t < 1/2) return q;
-      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+      if (t < 1 / 6) return p + (q - p) * 6 * t;
+      if (t < 1 / 2) return q;
+      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
       return p;
     };
     const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
     const p = 2 * l - q;
-    r = hue2rgb(p, q, h + 1/3);
+    r = hue2rgb(p, q, h + 1 / 3);
     g = hue2rgb(p, q, h);
-    b = hue2rgb(p, q, h - 1/3);
+    b = hue2rgb(p, q, h - 1 / 3);
   }
 
   return {
@@ -99,23 +125,41 @@ export function parseColor(input) {
 
   if (/^#[0-9A-Fa-f]{3,8}$/.test(trimmed)) {
     const c = hexToRgba(trimmed) || hexToRgb(trimmed);
-    if (c) return { ...c, format: 'hex' };
+    if (c) return { ...c, format: "hex" };
   }
 
-  const rgbMatch = trimmed.match(/^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/);
+  const rgbMatch = trimmed.match(
+    /^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/,
+  );
   if (rgbMatch) {
-    return { r: +rgbMatch[1], g: +rgbMatch[2], b: +rgbMatch[3], a: 1, format: 'rgb' };
+    return {
+      r: +rgbMatch[1],
+      g: +rgbMatch[2],
+      b: +rgbMatch[3],
+      a: 1,
+      format: "rgb",
+    };
   }
 
-  const rgbaMatch = trimmed.match(/^rgba\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([0-9.]+)\s*\)$/);
+  const rgbaMatch = trimmed.match(
+    /^rgba\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([0-9.]+)\s*\)$/,
+  );
   if (rgbaMatch) {
-    return { r: +rgbaMatch[1], g: +rgbaMatch[2], b: +rgbaMatch[3], a: +rgbaMatch[4], format: 'rgba' };
+    return {
+      r: +rgbaMatch[1],
+      g: +rgbaMatch[2],
+      b: +rgbaMatch[3],
+      a: +rgbaMatch[4],
+      format: "rgba",
+    };
   }
 
-  const hslMatch = trimmed.match(/^hsl\s*\(\s*(\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*\)$/);
+  const hslMatch = trimmed.match(
+    /^hsl\s*\(\s*(\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*\)$/,
+  );
   if (hslMatch) {
     const rgb = hslToRgb(+hslMatch[1], +hslMatch[2], +hslMatch[3]);
-    return { ...rgb, a: 1, format: 'hsl' };
+    return { ...rgb, a: 1, format: "hsl" };
   }
 
   return null;

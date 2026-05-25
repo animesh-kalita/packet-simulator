@@ -89,7 +89,7 @@ export default function NavtelecomGpsGenerator() {
   const bitmaskHex = useMemo(() => {
     const usedFields = [1, 3, 8, 10, 11, 13, 14];
     const bits = new Uint8Array(
-      Math.ceil(usedFields[usedFields.length - 1] / 8)
+      Math.ceil(usedFields[usedFields.length - 1] / 8),
     );
 
     usedFields.forEach((id) => {

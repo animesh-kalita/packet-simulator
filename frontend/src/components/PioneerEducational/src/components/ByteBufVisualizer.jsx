@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useTheme } from '@mui/material/styles';
+import { useTheme } from "@mui/material/styles";
 import {
   Box,
   Typography,
@@ -26,7 +26,7 @@ import {
   SkipPrevious as StepBackward,
   SkipNext as StepForward,
 } from "@mui/icons-material";
-import useBytesParser from '../hooks/useBytesParser';
+import useBytesParser from "../hooks/useBytesParser";
 
 const ByteBufVisualizer = ({ packetData, onStepUpdate }) => {
   const {
@@ -42,9 +42,18 @@ const ByteBufVisualizer = ({ packetData, onStepUpdate }) => {
 
   const stepCountRef = useRef(0);
   useEffect(() => {
-    if (onStepUpdate && stepHistory.length > 0 && stepHistory.length !== stepCountRef.current) {
+    if (
+      onStepUpdate &&
+      stepHistory.length > 0 &&
+      stepHistory.length !== stepCountRef.current
+    ) {
       stepCountRef.current = stepHistory.length;
-      onStepUpdate(stepHistory, position, stepHistory[stepHistory.length - 1], bytes);
+      onStepUpdate(
+        stepHistory,
+        position,
+        stepHistory[stepHistory.length - 1],
+        bytes,
+      );
     }
   });
   // intentionally no deps: we want to compare ref on every render without re-triggering
@@ -104,7 +113,7 @@ const ByteBufVisualizer = ({ packetData, onStepUpdate }) => {
   }, [isPlaying, speed, bytes.length, parseStep]);
 
   const playPause = () => {
-    setIsPlaying(prev => !prev);
+    setIsPlaying((prev) => !prev);
   };
 
   if (!bytes || bytes.length === 0) {
@@ -300,7 +309,11 @@ const ByteBufVisualizer = ({ packetData, onStepUpdate }) => {
 
         {/* Current Operation Info */}
         {stepHistory.length > 0 && (
-          <Box mt={3} p={2} sx={{ bgcolor: 'action.selected', borderRadius: 1 }}>
+          <Box
+            mt={3}
+            p={2}
+            sx={{ bgcolor: "action.selected", borderRadius: 1 }}
+          >
             <Typography variant="h6" gutterBottom>
               Current Operation
             </Typography>

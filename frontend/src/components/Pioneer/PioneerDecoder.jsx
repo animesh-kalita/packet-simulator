@@ -18,7 +18,7 @@ const cleanHex = (h) => (h || "").replace(/\s/g, "").toUpperCase();
 const hexToFloatLE = (hex) => {
   if (!hex || hex.length !== 8) return 0;
   const bytes = new Uint8Array(
-    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
+    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)),
   );
   const view = new DataView(bytes.buffer);
   return parseFloat(view.getFloat32(0, true).toFixed(6));
@@ -120,7 +120,7 @@ const SCHEMA = [
 
 export default function PioneerDecoder() {
   const [rawInput, setRawInput] = useState(
-    "2525130059E1600123456789101112000A001E1E000000414C0000050000004100000000000000FFFFFFFFFFFF00D5000186CB0026010816364466E64243B1489A428D68E541000000F003901257FFFFFF0000180000FFFFFF"
+    "2525130059E1600123456789101112000A001E1E000000414C0000050000004100000000000000FFFFFFFFFFFF00D5000186CB0026010816364466E64243B1489A428D68E541000000F003901257FFFFFF0000180000FFFFFF",
   );
 
   const [newImei, setNewImei] = useState("");
@@ -301,8 +301,8 @@ export default function PioneerDecoder() {
                   item.type === "imei"
                     ? "text"
                     : item.type === "date"
-                    ? "datetime-local"
-                    : "text"
+                      ? "datetime-local"
+                      : "text"
                 }
                 value={displayValue}
                 onChange={(e) => handleFieldChange(item, e.target.value)}

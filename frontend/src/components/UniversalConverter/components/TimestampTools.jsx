@@ -1,22 +1,44 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback } from "react";
 import {
-  Accordion, AccordionSummary, AccordionDetails, Typography,
-  Box, Stack, TextField, Select, MenuItem, FormControl, InputLabel,
-  Button, Grid, Divider, Chip, Paper,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+  Box,
+  Stack,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Button,
+  Grid,
+  Divider,
+  Chip,
+  Paper,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
-  parseTimestamp, dateToUnix, dateToUnixMs, dateToISO,
-  dateToUTCString, dateToLocaleString, getRelativeTime, getCommonTimezones,
-} from '../utils/timestamps';
-import CopyButton from './CopyButton';
-import { TIMESTAMP_PRESETS } from '../utils/constants';
+  parseTimestamp,
+  dateToUnix,
+  dateToUnixMs,
+  dateToISO,
+  dateToUTCString,
+  dateToLocaleString,
+  getRelativeTime,
+  getCommonTimezones,
+} from "../utils/timestamps";
+import CopyButton from "./CopyButton";
+import { TIMESTAMP_PRESETS } from "../utils/constants";
 
 export default function TimestampTools() {
-  const [input, setInput] = useState('');
-  const [timezone, setTimezone] = useState('UTC');
+  const [input, setInput] = useState("");
+  const [timezone, setTimezone] = useState("UTC");
   const parsed = useMemo(() => parseTimestamp(input), [input]);
-  const relativeTime = useMemo(() => parsed?.date ? getRelativeTime(parsed.date) : null, [parsed]);
+  const relativeTime = useMemo(
+    () => (parsed?.date ? getRelativeTime(parsed.date) : null),
+    [parsed],
+  );
 
   const handlePreset = useCallback((fn) => {
     setInput(String(fn()));
@@ -27,7 +49,13 @@ export default function TimestampTools() {
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography fontWeight={600}>Timestamp Converter</Typography>
         {parsed && (
-          <Chip size="small" label={parsed.source} color="primary" variant="outlined" sx={{ ml: 1.5 }} />
+          <Chip
+            size="small"
+            label={parsed.source}
+            color="primary"
+            variant="outlined"
+            sx={{ ml: 1.5 }}
+          />
         )}
       </AccordionSummary>
       <AccordionDetails>
@@ -36,15 +64,20 @@ export default function TimestampTools() {
             fullWidth
             size="small"
             value={input}
-            onChange={e => setInput(e.target.value)}
+            onChange={(e) => setInput(e.target.value)}
             placeholder="Unix timestamp, ISO date, or date string..."
-            sx={{ '& input': { fontFamily: 'monospace' } }}
+            sx={{ "& input": { fontFamily: "monospace" } }}
             aria-label="Enter timestamp"
           />
 
           <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
             {TIMESTAMP_PRESETS.map((preset, i) => (
-              <Button key={i} size="small" variant="outlined" onClick={() => handlePreset(preset.getValue)}>
+              <Button
+                key={i}
+                size="small"
+                variant="outlined"
+                onClick={() => handlePreset(preset.getValue)}
+              >
                 {preset.label}
               </Button>
             ))}
@@ -55,10 +88,17 @@ export default function TimestampTools() {
               <Stack spacing={1.5}>
                 <Box>
                   <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography variant="caption" color="text.secondary" sx={{ minWidth: 140, fontWeight: 600 }}>
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{ minWidth: 140, fontWeight: 600 }}
+                    >
                       Unix (seconds)
                     </Typography>
-                    <Typography variant="body2" sx={{ fontFamily: 'monospace', flex: 1 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontFamily: "monospace", flex: 1 }}
+                    >
                       {dateToUnix(parsed.date)}
                     </Typography>
                     <CopyButton text={dateToUnix(parsed.date)} />
@@ -66,10 +106,17 @@ export default function TimestampTools() {
                 </Box>
                 <Box>
                   <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography variant="caption" color="text.secondary" sx={{ minWidth: 140, fontWeight: 600 }}>
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{ minWidth: 140, fontWeight: 600 }}
+                    >
                       Unix (milliseconds)
                     </Typography>
-                    <Typography variant="body2" sx={{ fontFamily: 'monospace', flex: 1 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontFamily: "monospace", flex: 1 }}
+                    >
                       {dateToUnixMs(parsed.date)}
                     </Typography>
                     <CopyButton text={dateToUnixMs(parsed.date)} />
@@ -77,10 +124,17 @@ export default function TimestampTools() {
                 </Box>
                 <Box>
                   <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography variant="caption" color="text.secondary" sx={{ minWidth: 140, fontWeight: 600 }}>
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{ minWidth: 140, fontWeight: 600 }}
+                    >
                       ISO 8601
                     </Typography>
-                    <Typography variant="body2" sx={{ fontFamily: 'monospace', flex: 1 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontFamily: "monospace", flex: 1 }}
+                    >
                       {dateToISO(parsed.date)}
                     </Typography>
                     <CopyButton text={dateToISO(parsed.date)} />
@@ -88,10 +142,17 @@ export default function TimestampTools() {
                 </Box>
                 <Box>
                   <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography variant="caption" color="text.secondary" sx={{ minWidth: 140, fontWeight: 600 }}>
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{ minWidth: 140, fontWeight: 600 }}
+                    >
                       UTC String
                     </Typography>
-                    <Typography variant="body2" sx={{ fontFamily: 'monospace', flex: 1 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontFamily: "monospace", flex: 1 }}
+                    >
                       {dateToUTCString(parsed.date)}
                     </Typography>
                     <CopyButton text={dateToUTCString(parsed.date)} />
@@ -102,24 +163,42 @@ export default function TimestampTools() {
                     <Stack direction="row" alignItems="center" spacing={1}>
                       <FormControl size="small" sx={{ minWidth: 160 }}>
                         <InputLabel>Timezone</InputLabel>
-                        <Select value={timezone} label="Timezone" onChange={e => setTimezone(e.target.value)}>
-                          {getCommonTimezones().map(tz => (
-                            <MenuItem key={tz} value={tz}>{tz}</MenuItem>
+                        <Select
+                          value={timezone}
+                          label="Timezone"
+                          onChange={(e) => setTimezone(e.target.value)}
+                        >
+                          {getCommonTimezones().map((tz) => (
+                            <MenuItem key={tz} value={tz}>
+                              {tz}
+                            </MenuItem>
                           ))}
                         </Select>
                       </FormControl>
-                      <Typography variant="body2" sx={{ fontFamily: 'monospace', flex: 1 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ fontFamily: "monospace", flex: 1 }}
+                      >
                         {dateToLocaleString(parsed.date, timezone)}
                       </Typography>
-                      <CopyButton text={dateToLocaleString(parsed.date, timezone)} />
+                      <CopyButton
+                        text={dateToLocaleString(parsed.date, timezone)}
+                      />
                     </Stack>
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <Box>
-                      <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600 }}>
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{ fontWeight: 600 }}
+                      >
                         Relative Time
                       </Typography>
-                      <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ fontFamily: "monospace" }}
+                      >
                         {relativeTime}
                       </Typography>
                     </Box>

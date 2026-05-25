@@ -1,10 +1,18 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback } from "react";
 import {
-  Accordion, AccordionSummary, AccordionDetails, Typography, Box,
-  Stack, Chip, ToggleButtonGroup, ToggleButton, Tooltip,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { bytesToUnsignedInt, bytesToSignedInt } from '../utils/converters';
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+  Box,
+  Stack,
+  Chip,
+  ToggleButtonGroup,
+  ToggleButton,
+  Tooltip,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { bytesToUnsignedInt, bytesToSignedInt } from "../utils/converters";
 
 function BitCell({ bit, index, active, onClick }) {
   return (
@@ -13,26 +21,26 @@ function BitCell({ bit, index, active, onClick }) {
         onClick={onClick}
         role="button"
         tabIndex={0}
-        onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onClick?.()}
+        onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onClick?.()}
         aria-label={`Bit ${index}: ${bit}`}
         sx={{
           width: 28,
           height: 32,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          bgcolor: active ? 'primary.main' : 'action.hover',
-          color: active ? 'primary.contrastText' : 'text.secondary',
-          fontSize: '0.75rem',
-          fontFamily: 'monospace',
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          bgcolor: active ? "primary.main" : "action.hover",
+          color: active ? "primary.contrastText" : "text.secondary",
+          fontSize: "0.75rem",
+          fontFamily: "monospace",
           fontWeight: 700,
           borderRadius: 0.5,
-          cursor: onClick ? 'pointer' : 'default',
-          border: '1px solid',
-          borderColor: active ? 'primary.dark' : 'divider',
-          transition: 'all 0.1s ease',
-          '&:hover': onClick ? { opacity: 0.8 } : {},
-          userSelect: 'none',
+          cursor: onClick ? "pointer" : "default",
+          border: "1px solid",
+          borderColor: active ? "primary.dark" : "divider",
+          transition: "all 0.1s ease",
+          "&:hover": onClick ? { opacity: 0.8 } : {},
+          userSelect: "none",
         }}
       >
         {bit}
@@ -41,7 +49,12 @@ function BitCell({ bit, index, active, onClick }) {
   );
 }
 
-export default function BitInspector({ bytes, endianness, settings, onUpdateSetting }) {
+export default function BitInspector({
+  bytes,
+  endianness,
+  settings,
+  onUpdateSetting,
+}) {
   const [editMode, setEditMode] = useState(false);
   const [editableBits, setEditableBits] = useState(null);
 
@@ -60,12 +73,15 @@ export default function BitInspector({ bytes, endianness, settings, onUpdateSett
     return result;
   }, [bytes, editMode, editableBits]);
 
-  const toggleBit = useCallback((index) => {
-    if (!editMode) return;
-    const newBits = [...bits];
-    newBits[index] = newBits[index] ? 0 : 1;
-    setEditableBits(newBits);
-  }, [bits, editMode]);
+  const toggleBit = useCallback(
+    (index) => {
+      if (!editMode) return;
+      const newBits = [...bits];
+      newBits[index] = newBits[index] ? 0 : 1;
+      setEditableBits(newBits);
+    },
+    [bits, editMode],
+  );
 
   const groupedBits = useMemo(() => {
     const groups = [];
@@ -76,7 +92,7 @@ export default function BitInspector({ bytes, endianness, settings, onUpdateSett
   }, [bits, grouping]);
 
   const numericValues = useMemo(() => {
-    return groupedBits.map(group => {
+    return groupedBits.map((group) => {
       let unsigned = 0;
       for (const bit of group) unsigned = (unsigned << 1) | bit;
       const bitLen = group.length;
@@ -102,19 +118,30 @@ export default function BitInspector({ bytes, endianness, settings, onUpdateSett
     <Accordion variant="outlined" sx={{ mb: 2 }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography fontWeight={600}>Bit Inspector</Typography>
-        <Chip label={`${totalBits} bits`} size="small" sx={{ ml: 1.5 }} variant="outlined" />
+        <Chip
+          label={`${totalBits} bits`}
+          size="small"
+          sx={{ ml: 1.5 }}
+          variant="outlined"
+        />
       </AccordionSummary>
       <AccordionDetails>
         <Stack spacing={2}>
-          <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap" useFlexGap>
+          <Stack
+            direction="row"
+            spacing={2}
+            alignItems="center"
+            flexWrap="wrap"
+            useFlexGap
+          >
             <ToggleButtonGroup
               size="small"
               value={grouping}
               exclusive
-              onChange={(_, val) => val && onUpdateSetting('bitLength', val)}
+              onChange={(_, val) => val && onUpdateSetting("bitLength", val)}
               aria-label="Bit grouping"
             >
-              {[8, 16, 32, 64].map(g => (
+              {[8, 16, 32, 64].map((g) => (
                 <ToggleButton key={g} value={g} disabled={g > totalBits}>
                   {g}-bit
                 </ToggleButton>
@@ -123,10 +150,10 @@ export default function BitInspector({ bytes, endianness, settings, onUpdateSett
 
             <ToggleButtonGroup
               size="small"
-              value={editMode ? 'edit' : 'view'}
+              value={editMode ? "edit" : "view"}
               exclusive
               onChange={(_, val) => {
-                const enable = val === 'edit';
+                const enable = val === "edit";
                 setEditMode(enable);
                 if (enable && !editableBits) setEditableBits([...bits]);
                 if (!enable) setEditableBits(null);
@@ -139,9 +166,11 @@ export default function BitInspector({ bytes, endianness, settings, onUpdateSett
 
             <ToggleButtonGroup
               size="small"
-              value={settings.signed ? 'signed' : 'unsigned'}
+              value={settings.signed ? "signed" : "unsigned"}
               exclusive
-              onChange={(_, val) => val && onUpdateSetting('signed', val === 'signed')}
+              onChange={(_, val) =>
+                val && onUpdateSetting("signed", val === "signed")
+              }
               aria-label="Interpretation"
             >
               <ToggleButton value="unsigned">Unsigned</ToggleButton>
@@ -151,27 +180,51 @@ export default function BitInspector({ bytes, endianness, settings, onUpdateSett
 
           {groupedBits.map((group, gi) => (
             <Box key={gi}>
-              <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 0.5 }}>
-                <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600, minWidth: 60 }}>
-                  Byte {gi * grouping / 8}-{(gi * grouping + group.length - 1) / 8}
+              <Stack
+                direction="row"
+                alignItems="center"
+                spacing={1}
+                sx={{ mb: 0.5 }}
+              >
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ fontWeight: 600, minWidth: 60 }}
+                >
+                  Byte {(gi * grouping) / 8}-
+                  {(gi * grouping + group.length - 1) / 8}
                 </Typography>
                 {group.length >= 8 && (
-                  <Typography variant="caption" color="text.secondary" sx={{ fontFamily: 'monospace' }}>
-                    {numericValues[gi].unsigned.toString(16).toUpperCase().padStart(group.length / 4, '0')}h
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ fontFamily: "monospace" }}
+                  >
+                    {numericValues[gi].unsigned
+                      .toString(16)
+                      .toUpperCase()
+                      .padStart(group.length / 4, "0")}
+                    h
                   </Typography>
                 )}
-                <Typography variant="caption" color="text.secondary" sx={{ fontFamily: 'monospace' }}>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ fontFamily: "monospace" }}
+                >
                   u:{numericValues[gi].unsigned} / s:{numericValues[gi].signed}
                 </Typography>
               </Stack>
-              <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+              <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
                 {group.map((bit, bi) => (
                   <BitCell
                     key={bi}
                     bit={bit}
                     index={gi * grouping + bi}
                     active={bit === 1}
-                    onClick={editMode ? () => toggleBit(gi * grouping + bi) : null}
+                    onClick={
+                      editMode ? () => toggleBit(gi * grouping + bi) : null
+                    }
                   />
                 ))}
               </Box>
@@ -201,7 +254,10 @@ export default function BitInspector({ bytes, endianness, settings, onUpdateSett
                 label="Cancel"
                 variant="outlined"
                 size="small"
-                onClick={() => { setEditableBits(null); setEditMode(false); }}
+                onClick={() => {
+                  setEditableBits(null);
+                  setEditMode(false);
+                }}
               />
             </Stack>
           )}

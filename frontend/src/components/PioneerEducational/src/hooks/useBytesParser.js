@@ -1,5 +1,5 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
-import { parsePacketStep } from '../utils/packetParser';
+import { useState, useCallback, useRef, useEffect } from "react";
+import { parsePacketStep } from "../utils/packetParser";
 
 const useBytesParser = (packetHexData) => {
   const [bytes, setBytes] = useState([]);
@@ -18,9 +18,9 @@ const useBytesParser = (packetHexData) => {
     }
 
     // Convert hex string to byte array
-    const cleanedHex = hexData.replace(/\s/g, '');
+    const cleanedHex = hexData.replace(/\s/g, "");
     const byteArray = [];
-    
+
     for (let i = 0; i < cleanedHex.length; i += 2) {
       const byte = parseInt(cleanedHex.substr(i, 2), 16);
       if (!isNaN(byte)) {
@@ -31,12 +31,12 @@ const useBytesParser = (packetHexData) => {
     setBytes(byteArray);
     setPosition(0);
     setStepHistory([]);
-    
+
     // Initialize parser reference
     parserRef.current = {
       bytes: byteArray,
       position: 0,
-      history: []
+      history: [],
     };
   }, []);
 
@@ -46,7 +46,10 @@ const useBytesParser = (packetHexData) => {
   }, [packetHexData, initializeParser]);
 
   const parseStep = useCallback(() => {
-    if (!parserRef.current || parserRef.current.position >= parserRef.current.bytes.length) {
+    if (
+      !parserRef.current ||
+      parserRef.current.position >= parserRef.current.bytes.length
+    ) {
       return false;
     }
 
@@ -54,7 +57,7 @@ const useBytesParser = (packetHexData) => {
     if (result) {
       parserRef.current = result.parserState;
       setPosition(result.parserState.position);
-      setStepHistory(prev => [...prev, result.stepInfo]);
+      setStepHistory((prev) => [...prev, result.stepInfo]);
       return true;
     }
     return false;
@@ -65,23 +68,26 @@ const useBytesParser = (packetHexData) => {
       parserRef.current = {
         bytes: [...bytes],
         position: 0,
-        history: []
+        history: [],
       };
       setPosition(0);
       setStepHistory([]);
     }
   }, [bytes]);
 
-  const setBreakpoint = useCallback((index) => {
-    if (index >= 0 && index < bytes.length) {
-      setBreakpoints(prev => {
-        if (prev.includes(index)) {
-          return prev.filter(i => i !== index);
-        }
-        return [...prev, index];
-      });
-    }
-  }, [bytes]);
+  const setBreakpoint = useCallback(
+    (index) => {
+      if (index >= 0 && index < bytes.length) {
+        setBreakpoints((prev) => {
+          if (prev.includes(index)) {
+            return prev.filter((i) => i !== index);
+          }
+          return [...prev, index];
+        });
+      }
+    },
+    [bytes],
+  );
 
   return {
     bytes,
@@ -90,7 +96,7 @@ const useBytesParser = (packetHexData) => {
     breakpoints,
     parseStep,
     resetParser,
-    setBreakpoint
+    setBreakpoint,
   };
 };
 

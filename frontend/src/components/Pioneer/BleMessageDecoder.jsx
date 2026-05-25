@@ -37,7 +37,7 @@ const intToHex = (val, bytes) => {
 const hexToFloatLE = (hex) => {
   if (!hex || hex.length !== 8) return 0;
   const bytes = new Uint8Array(
-    hex.match(/.{1,2}/g).map((b) => parseInt(b, 16))
+    hex.match(/.{1,2}/g).map((b) => parseInt(b, 16)),
   );
   const view = new DataView(bytes.buffer);
   return parseFloat(view.getFloat32(0, true).toFixed(6));
@@ -277,7 +277,7 @@ const PAYLOAD_DEFS = {
 export default function BleMessageDecoderFixed() {
   // default sample (your original)
   const [rawInput, setRawInput] = useState(
-    "2525100027000b0867284063992640260113103324000007cf75c68ca511a000040708ffff0047"
+    "2525100027000b0867284063992640260113103324000007cf75c68ca511a000040708ffff0047",
   );
   const [newImei, setNewImei] = useState("");
 
@@ -444,7 +444,7 @@ export default function BleMessageDecoderFixed() {
                             f.t ?? "hex",
                             start,
                             end,
-                            e.target.value
+                            e.target.value,
                           )
                         }
                         InputLabelProps={{ shrink: true }}

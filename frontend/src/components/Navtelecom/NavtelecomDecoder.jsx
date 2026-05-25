@@ -349,7 +349,7 @@ const analyzePacket = (header, body) => {
     const ver = parseInt(body.substring(14, 16), 16); // Byte 7 (0-based)
     details = `Proto Ver: ${ver}, Struct Ver: ${parseInt(
       body.substring(16, 18),
-      16
+      16,
     )}`;
   }
   // 4. FLEX Messages (Start with ~ 0x7E)
@@ -390,7 +390,7 @@ export default function NavtelecomDecoder() {
   // @NTC (404E5443) + Rcv(1) + Snd(0) + Len(26) + CSd + CSp
   // Body: *>FLEX...
   const [rawInput, setRawInput] = useState(
-    "404E544301000000000000001A001B192A3E464C4558B014147AF2002000000000000000000000000000"
+    "404E544301000000000000001A001B192A3E464C4558B014147AF2002000000000000000000000000000",
   );
 
   // 16 Bytes Header
@@ -423,7 +423,7 @@ export default function NavtelecomDecoder() {
   // Packet Info
   const packetInfo = useMemo(
     () => analyzePacket(headerHex, bodyHex),
-    [headerHex, bodyHex]
+    [headerHex, bodyHex],
   );
 
   // Handlers

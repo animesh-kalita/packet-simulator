@@ -1,15 +1,15 @@
 export function crc32(bytes) {
   if (!bytes || bytes.length === 0) return null;
 
-  let crc = 0xFFFFFFFF;
+  let crc = 0xffffffff;
   const table = generateCRC32Table();
 
   for (let i = 0; i < bytes.length; i++) {
-    const index = (crc ^ bytes[i]) & 0xFF;
+    const index = (crc ^ bytes[i]) & 0xff;
     crc = (crc >>> 8) ^ table[index];
   }
 
-  return (crc ^ 0xFFFFFFFF) >>> 0;
+  return (crc ^ 0xffffffff) >>> 0;
 }
 
 function generateCRC32Table() {
@@ -17,7 +17,7 @@ function generateCRC32Table() {
   for (let i = 0; i < 256; i++) {
     let c = i;
     for (let j = 0; j < 8; j++) {
-      c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
     }
     table[i] = c;
   }
@@ -27,15 +27,17 @@ function generateCRC32Table() {
 export function crc32Hex(bytes) {
   const crc = crc32(bytes);
   if (crc === null) return null;
-  return crc.toString(16).toUpperCase().padStart(8, '0');
+  return crc.toString(16).toUpperCase().padStart(8, "0");
 }
 
 export async function sha256(bytes) {
   if (!bytes || bytes.length === 0) return null;
   try {
-    const hashBuffer = await crypto.subtle.digest('SHA-256', bytes);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", bytes);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0').toLowerCase()).join('');
+    return hashArray
+      .map((b) => b.toString(16).padStart(2, "0").toLowerCase())
+      .join("");
   } catch {
     return null;
   }
@@ -44,9 +46,11 @@ export async function sha256(bytes) {
 export async function sha1(bytes) {
   if (!bytes || bytes.length === 0) return null;
   try {
-    const hashBuffer = await crypto.subtle.digest('SHA-1', bytes);
+    const hashBuffer = await crypto.subtle.digest("SHA-1", bytes);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0').toLowerCase()).join('');
+    return hashArray
+      .map((b) => b.toString(16).padStart(2, "0").toLowerCase())
+      .join("");
   } catch {
     return null;
   }
@@ -55,9 +59,11 @@ export async function sha1(bytes) {
 export async function md5(bytes) {
   if (!bytes || bytes.length === 0) return null;
   try {
-    const hashBuffer = await crypto.subtle.digest('MD5', bytes);
+    const hashBuffer = await crypto.subtle.digest("MD5", bytes);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0').toLowerCase()).join('');
+    return hashArray
+      .map((b) => b.toString(16).padStart(2, "0").toLowerCase())
+      .join("");
   } catch {
     return simpleMD5(bytes);
   }
@@ -66,10 +72,10 @@ export async function md5(bytes) {
 function simpleMD5(bytes) {
   let hash = 0;
   for (let i = 0; i < bytes.length; i++) {
-    hash = ((hash << 5) - hash) + bytes[i];
+    hash = (hash << 5) - hash + bytes[i];
     hash = hash & hash;
   }
-  const hashHex = (hash >>> 0).toString(16).toLowerCase().padStart(8, '0');
+  const hashHex = (hash >>> 0).toString(16).toLowerCase().padStart(8, "0");
   return hashHex + hashHex + hashHex + hashHex;
 }
 

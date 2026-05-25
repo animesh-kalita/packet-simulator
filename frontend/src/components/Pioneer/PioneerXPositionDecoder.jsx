@@ -41,7 +41,7 @@ const intToHex = (val, bytes) => {
 const hexToFloatLE = (hex) => {
   if (!hex || hex.length !== 8) return 0;
   const bytes = new Uint8Array(
-    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
+    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)),
   );
   const view = new DataView(bytes.buffer);
   return parseFloat(view.getFloat32(0, true).toFixed(6));
@@ -218,7 +218,7 @@ export default function PioneerXPositionDecoder() {
   // Sample Data from Doc (reconstructed)
   // Header..IMEI..Intervals..Status..Analog..Multiplex..Odometer..GNSS..Pwr..FMS..Sensors
   const [rawInput, setRawInput] = useState(
-    "252533005700010880616898888888000A00FF2001000020009600989910101010999905550155015500000150000000101005050005051010050558866B4276D6E342912AB441111505050410101003FFFFFFFF5002BC82FF0001E10500100001FC1700100001FC17"
+    "252533005700010880616898888888000A00FF2001000020009600989910101010999905550155015500000150000000101005050005051010050558866B4276D6E342912AB441111505050410101003FFFFFFFF5002BC82FF0001E10500100001FC1700100001FC17",
   );
   const [newImei, setNewImei] = useState("");
 
@@ -410,8 +410,8 @@ export default function PioneerXPositionDecoder() {
                       f.t === "signed_int"
                         ? "number"
                         : f.t === "date"
-                        ? "datetime-local"
-                        : "text"
+                          ? "datetime-local"
+                          : "text"
                     }
                     onChange={(e) => {
                       let v = e.target.value;

@@ -50,7 +50,7 @@ const hexToIntLE = (hex, signed = false) => {
 const hexToFloatLE = (hex) => {
   if (!hex || hex.length !== 8) return 0;
   const bytes = new Uint8Array(
-    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
+    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)),
   );
   const view = new DataView(bytes.buffer);
   return view.getFloat32(0, true);
@@ -128,7 +128,7 @@ export default function NavtelecomFlexDecoder() {
   // Complex to synthesize manually. Let's provide a parser for the "Data Part" mainly.
 
   const [rawInput, setRawInput] = useState(
-    "7E4101070000000062D53338E40CFC01288B19010000803F"
+    "7E4101070000000062D53338E40CFC01288B19010000803F",
     // Mock: ~A, 1 Rec. Mask 0x00...07 (Bits 1,2,3 set -> ID 1,2,3 active?)
     // Actually FLEX mask is variable length.
   );

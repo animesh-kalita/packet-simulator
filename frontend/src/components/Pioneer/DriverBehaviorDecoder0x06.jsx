@@ -18,7 +18,7 @@ const cleanHex = (h) => (h || "").replace(/\s/g, "").toUpperCase();
 const hexToFloatLE = (hex) => {
   if (!hex || hex.length !== 8) return 0;
   const bytes = new Uint8Array(
-    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
+    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)),
   );
   const view = new DataView(bytes.buffer);
   return parseFloat(view.getFloat32(0, true).toFixed(6));
@@ -117,7 +117,7 @@ export default function DriverBehaviorDecoder0x06() {
   // Constructed Sample (44 Bytes)
   // Header(2525) Type(06) Len(002C) Serial(0001) IMEI(...) Behavior(00) Date(00..) Status(00) Accel(00..) Alt/Lat/Long(LE) Speed(1115) Dir(0505)
   const [rawInput, setRawInput] = useState(
-    "252506002C000108806168988888880000000000000000000000000058866B4276D6E342912AB44111150505"
+    "252506002C000108806168988888880000000000000000000000000058866B4276D6E342912AB44111150505",
   );
   const [newImei, setNewImei] = useState("");
 
@@ -297,8 +297,8 @@ export default function DriverBehaviorDecoder0x06() {
                   item.type === "speed_nibble"
                     ? "number"
                     : item.type === "date"
-                    ? "datetime-local"
-                    : "text"
+                      ? "datetime-local"
+                      : "text"
                 }
                 value={displayValue}
                 onChange={(e) => handleFieldChange(item, e.target.value)}
@@ -308,8 +308,8 @@ export default function DriverBehaviorDecoder0x06() {
                     item.type === "date"
                       ? "1"
                       : item.type === "float"
-                      ? "0.000001"
-                      : "0.1",
+                        ? "0.000001"
+                        : "0.1",
                 }}
               />
               <Typography

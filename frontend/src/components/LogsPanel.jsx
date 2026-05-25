@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Card,
@@ -13,113 +13,113 @@ import {
   Alert,
   Toolbar,
   IconButton,
-  Tooltip
-} from '@mui/material'
+  Tooltip,
+} from "@mui/material";
 import {
   Download as DownloadIcon,
   Clear as ClearIcon,
-  Refresh as RefreshIcon
-} from '@mui/icons-material'
+  Refresh as RefreshIcon,
+} from "@mui/icons-material";
 import {
   getRecentLogs,
   downloadLogs,
   clearLogs,
-  createLogStream
-} from '../services/api'
+  createLogStream,
+} from "../services/api";
 
 function LogsPanel() {
-  const [logs, setLogs] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
-  const [success, setSuccess] = useState(null)
-  const [isStreaming, setIsStreaming] = useState(false)
-  const logStreamRef = useRef(null)
-  const logsEndRef = useRef(null)
+  const [logs, setLogs] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const logStreamRef = useRef(null);
+  const logsEndRef = useRef(null);
 
   useEffect(() => {
-    loadLogs()
-    startLogStream()
-    
+    loadLogs();
+    startLogStream();
+
     return () => {
       if (logStreamRef.current) {
-        logStreamRef.current.close()
+        logStreamRef.current.close();
       }
-    }
-  }, [])
+    };
+  }, []);
 
   useEffect(() => {
     // Auto-scroll to bottom when new logs arrive
     if (logsEndRef.current) {
-      logsEndRef.current.scrollIntoView({ behavior: 'smooth' })
+      logsEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [logs])
+  }, [logs]);
 
   const loadLogs = async () => {
     try {
-      setLoading(true)
-      const recentLogs = await getRecentLogs()
-      setLogs(recentLogs)
+      setLoading(true);
+      const recentLogs = await getRecentLogs();
+      setLogs(recentLogs);
     } catch (err) {
-      setError('Failed to load logs')
+      setError("Failed to load logs");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const startLogStream = () => {
     if (logStreamRef.current) {
-      logStreamRef.current.close()
+      logStreamRef.current.close();
     }
 
     logStreamRef.current = createLogStream(
       (logEntry) => {
-        setLogs(prev => [...prev, logEntry])
-        setIsStreaming(true)
+        setLogs((prev) => [...prev, logEntry]);
+        setIsStreaming(true);
       },
       (error) => {
-        console.error('Log stream error:', error)
-        setIsStreaming(false)
+        console.error("Log stream error:", error);
+        setIsStreaming(false);
         // Try to reconnect after 5 seconds
-        setTimeout(startLogStream, 5000)
-      }
-    )
-  }
+        setTimeout(startLogStream, 5000);
+      },
+    );
+  };
 
   const handleDownload = async () => {
     try {
-      await downloadLogs()
-      setSuccess('Logs downloaded successfully')
+      await downloadLogs();
+      setSuccess("Logs downloaded successfully");
     } catch (err) {
-      setError('Failed to download logs')
+      setError("Failed to download logs");
     }
-  }
+  };
 
   const handleClear = async () => {
     try {
-      await clearLogs()
-      setLogs([])
-      setSuccess('Logs cleared successfully')
+      await clearLogs();
+      setLogs([]);
+      setSuccess("Logs cleared successfully");
     } catch (err) {
-      setError('Failed to clear logs')
+      setError("Failed to clear logs");
     }
-  }
+  };
 
   const getLogLevelColor = (level) => {
     switch (level) {
-      case 'ERROR':
-        return 'error'
-      case 'WARN':
-        return 'warning'
-      case 'INFO':
-        return 'info'
+      case "ERROR":
+        return "error";
+      case "WARN":
+        return "warning";
+      case "INFO":
+        return "info";
       default:
-        return 'default'
+        return "default";
     }
-  }
+  };
 
   const formatTimestamp = (timestamp) => {
-    return new Date(timestamp).toLocaleTimeString()
-  }
+    return new Date(timestamp).toLocaleTimeString();
+  };
 
   return (
     <Box>
@@ -134,7 +134,11 @@ function LogsPanel() {
       )}
 
       {success && (
-        <Alert severity="success" sx={{ mb: 2 }} onClose={() => setSuccess(null)}>
+        <Alert
+          severity="success"
+          sx={{ mb: 2 }}
+          onClose={() => setSuccess(null)}
+        >
           {success}
         </Alert>
       )}
@@ -144,27 +148,22 @@ function LogsPanel() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Live Logs
             {isStreaming && (
-              <Chip 
-                label="Live" 
-                color="success" 
-                size="small" 
-                sx={{ ml: 1 }}
-              />
+              <Chip label="Live" color="success" size="small" sx={{ ml: 1 }} />
             )}
           </Typography>
-          
+
           <Tooltip title="Refresh">
             <IconButton onClick={loadLogs} disabled={loading}>
               <RefreshIcon />
             </IconButton>
           </Tooltip>
-          
+
           <Tooltip title="Download Logs">
             <IconButton onClick={handleDownload}>
               <DownloadIcon />
             </IconButton>
           </Tooltip>
-          
+
           <Tooltip title="Clear Logs">
             <IconButton onClick={handleClear}>
               <ClearIcon />
@@ -173,19 +172,19 @@ function LogsPanel() {
         </Toolbar>
 
         <CardContent sx={{ pt: 0 }}>
-          <Paper 
-            variant="outlined" 
-            sx={{ 
-              height: 500, 
-              overflow: 'auto',
-              bgcolor: 'grey.50'
+          <Paper
+            variant="outlined"
+            sx={{
+              height: 500,
+              overflow: "auto",
+              bgcolor: "grey.50",
             }}
           >
             {logs.length === 0 ? (
-              <Box 
-                display="flex" 
-                justifyContent="center" 
-                alignItems="center" 
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
                 height="100%"
               >
                 <Typography color="text.secondary">
@@ -202,9 +201,9 @@ function LogsPanel() {
                           <Typography variant="caption" color="text.secondary">
                             {formatTimestamp(log.timestamp)}
                           </Typography>
-                          <Chip 
-                            label={log.level} 
-                            size="small" 
+                          <Chip
+                            label={log.level}
+                            size="small"
                             color={getLogLevelColor(log.level)}
                             variant="outlined"
                           />
@@ -223,7 +222,7 @@ function LogsPanel() {
         </CardContent>
       </Card>
     </Box>
-  )
+  );
 }
 
-export default LogsPanel
+export default LogsPanel;

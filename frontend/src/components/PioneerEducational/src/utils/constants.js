@@ -179,11 +179,23 @@ export const PACKET_STRUCTURES = {
     { name: "Length", bytes: 2, description: "Total packet length" },
     { name: "Index", bytes: 2, description: "Packet sequence number" },
     { name: "IMEI", bytes: 8, description: "Device identifier (BCD encoded)" },
-    { name: "Protocol/Config", bytes: 6, description: "Protocol version & configuration flags" },
+    {
+      name: "Protocol/Config",
+      bytes: 6,
+      description: "Protocol version & configuration flags",
+    },
     { name: "Status", bytes: 2, description: "Device status flags" },
-    { name: "GPS Data", bytes: 20, description: "Latitude, longitude, altitude, speed, direction" },
+    {
+      name: "GPS Data",
+      bytes: 20,
+      description: "Latitude, longitude, altitude, speed, direction",
+    },
     { name: "Timestamp", bytes: 6, description: "Date/time of fix" },
-    { name: "IO/ADC", bytes: 16, description: "IO status, ADC values, battery" },
+    {
+      name: "IO/ADC",
+      bytes: 16,
+      description: "IO status, ADC values, battery",
+    },
     { name: "Reserved", bytes: 4, description: "Reserved bytes" },
   ],
   [PACKET_TYPES.MSG_ALARM_2]: [
@@ -193,9 +205,17 @@ export const PACKET_STRUCTURES = {
     { name: "IMEI", bytes: 8, description: "Device identifier (BCD encoded)" },
     { name: "Alarm Type", bytes: 8, description: "Alarm classification data" },
     { name: "Status", bytes: 2, description: "Device status flags" },
-    { name: "GPS Data", bytes: 20, description: "Latitude, longitude, altitude, speed, direction" },
+    {
+      name: "GPS Data",
+      bytes: 20,
+      description: "Latitude, longitude, altitude, speed, direction",
+    },
     { name: "Timestamp", bytes: 6, description: "Date/time of alarm" },
-    { name: "IO/ADC", bytes: 16, description: "IO status, ADC values, battery" },
+    {
+      name: "IO/ADC",
+      bytes: 16,
+      description: "IO status, ADC values, battery",
+    },
   ],
   [PACKET_TYPES.MSG_BLE]: [
     { name: "Header", bytes: 2, description: "Packet identifier (0x2525)" },
@@ -210,6 +230,10 @@ export const PACKET_STRUCTURES = {
     { name: "Length", bytes: 2, description: "Total packet length" },
     { name: "Index", bytes: 2, description: "Packet sequence number" },
     { name: "IMEI", bytes: 8, description: "Device identifier (BCD encoded)" },
-    { name: "Network Data", bytes: 46, description: "Network status and BLE MAC entries" },
+    {
+      name: "Network Data",
+      bytes: 46,
+      description: "Network status and BLE MAC entries",
+    },
   ],
 };

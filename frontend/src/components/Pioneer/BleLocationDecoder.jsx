@@ -35,7 +35,7 @@ const intToHex = (val, bytes) => {
 const hexToFloatLE = (hex) => {
   if (!hex || hex.length !== 8) return 0;
   const bytes = new Uint8Array(
-    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
+    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)),
   );
   const view = new DataView(bytes.buffer);
   return parseFloat(view.getFloat32(0, true).toFixed(6));
@@ -236,7 +236,7 @@ const PAYLOAD_START = 42; // Byte index where payload begins
 
 export default function BleLocationDecoder_V2() {
   const [rawInput, setRawInput] = useState(
-    "252512003600010880616898888888000000000000010058866B4276D6E342912AB44111150505000104B3EC0024CE9F0F680004B3EC0024CE9F0F6800"
+    "252512003600010880616898888888000000000000010058866B4276D6E342912AB44111150505000104B3EC0024CE9F0F680004B3EC0024CE9F0F6800",
   );
   const [newImei, setNewImei] = useState("");
 
@@ -503,7 +503,7 @@ export default function BleLocationDecoder_V2() {
                               field.type,
                               start,
                               end,
-                              e.target.value
+                              e.target.value,
                             )
                           }
                           InputLabelProps={{ shrink: true }}

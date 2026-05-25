@@ -48,7 +48,7 @@ const hexToIntLE = (hex, signed = false) => {
 const hexToFloatLE = (hex) => {
   if (!hex || hex.length !== 8) return 0;
   const bytes = new Uint8Array(
-    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
+    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)),
   );
   const view = new DataView(bytes.buffer);
   return view.getFloat32(0, true);
@@ -100,7 +100,7 @@ const FIELD_DEFS = {
     Array.from({ length: 8 }, (_, i) => [
       21 + i,
       { s: 2, t: "mv", n: `Analog ${i + 1} (mV)` },
-    ])
+    ]),
   ),
 
   // --- IO / Counters ---
@@ -119,7 +119,7 @@ const FIELD_DEFS = {
     Array.from({ length: 6 }, (_, i) => [
       38 + i,
       { s: 2, t: "u16", n: `Fuel Level ${i + 1} (RS485)` },
-    ])
+    ]),
   ),
   44: { s: 2, t: "u16", n: "Fuel Level (RS232)" },
 
@@ -128,7 +128,7 @@ const FIELD_DEFS = {
     Array.from({ length: 8 }, (_, i) => [
       45 + i,
       { s: 1, t: "i8", n: `Temp Digital ${i + 1}` },
-    ])
+    ]),
   ),
 
   // --- CAN Data (53-69) ---
@@ -141,7 +141,7 @@ const FIELD_DEFS = {
     Array.from({ length: 5 }, (_, i) => [
       58 + i,
       { s: 2, t: "u16", n: `CAN Axle Load ${i + 1}` },
-    ])
+    ]),
   ),
   63: { s: 1, t: "u8", n: "Gas Pedal %" },
   64: { s: 1, t: "u8", n: "Brake Pedal %" },
@@ -166,7 +166,7 @@ const FIELD_DEFS = {
     Array.from({ length: 6 }, (_, i) => [
       78 + i,
       { s: 1, t: "i8", n: `Temp Fuel Sensor ${i + 1}` },
-    ])
+    ]),
   ),
 
   // --- Combined Fuel Level+Temp (84-93) ---
@@ -175,7 +175,7 @@ const FIELD_DEFS = {
     Array.from({ length: 10 }, (_, i) => [
       84 + i,
       { s: 3, t: "fuel_combo", n: `Fuel Level+Temp ${i + 7}` },
-    ])
+    ]),
   ),
 
   // --- Tire Pressure Sensors (94-97) ---

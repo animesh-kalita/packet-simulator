@@ -1,11 +1,25 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo } from "react";
 import {
-  Accordion, AccordionSummary, AccordionDetails, Typography,
-  Box, Stack, TextField, Paper, Divider,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { parseColor, hexToRgb, rgbToHex, rgbToHsl, hslToRgb, rgbaToHex } from '../utils/colors';
-import CopyButton from './CopyButton';
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+  Box,
+  Stack,
+  TextField,
+  Paper,
+  Divider,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import {
+  parseColor,
+  hexToRgb,
+  rgbToHex,
+  rgbToHsl,
+  hslToRgb,
+  rgbaToHex,
+} from "../utils/colors";
+import CopyButton from "./CopyButton";
 
 function ColorSwatch({ color }) {
   if (!color) return null;
@@ -16,8 +30,8 @@ function ColorSwatch({ color }) {
         width: 48,
         height: 48,
         borderRadius: 1,
-        border: '1px solid',
-        borderColor: 'divider',
+        border: "1px solid",
+        borderColor: "divider",
         backgroundColor: `rgba(${r}, ${g}, ${b}, ${a})`,
         flexShrink: 0,
       }}
@@ -26,9 +40,9 @@ function ColorSwatch({ color }) {
 }
 
 export default function ColorTools() {
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const parsed = useMemo(() => {
-    if (!input || input.trim() === '') return null;
+    if (!input || input.trim() === "") return null;
     return parseColor(input.trim());
   }, [input]);
 
@@ -40,7 +54,11 @@ export default function ColorTools() {
   const complementary = useMemo(() => {
     if (!hsl) return null;
     const compH = (hsl.h + 180) % 360;
-    return rgbToHex(hslToRgb(compH, hsl.s, hsl.l).r, hslToRgb(compH, hsl.s, hsl.l).g, hslToRgb(compH, hsl.s, hsl.l).b);
+    return rgbToHex(
+      hslToRgb(compH, hsl.s, hsl.l).r,
+      hslToRgb(compH, hsl.s, hsl.l).g,
+      hslToRgb(compH, hsl.s, hsl.l).b,
+    );
   }, [hsl]);
 
   return (
@@ -54,9 +72,9 @@ export default function ColorTools() {
             fullWidth
             size="small"
             value={input}
-            onChange={e => setInput(e.target.value)}
+            onChange={(e) => setInput(e.target.value)}
             placeholder="#FF0000 or rgb(255,0,0) or hsl(0,100%,50%)"
-            sx={{ '& input': { fontFamily: 'monospace' } }}
+            sx={{ "& input": { fontFamily: "monospace" } }}
             aria-label="Enter color value"
           />
 
@@ -66,25 +84,38 @@ export default function ColorTools() {
                 <Stack direction="row" spacing={2} alignItems="center">
                   <ColorSwatch color={parsed} />
                   <Box>
-                    <Typography variant="body2" sx={{ fontFamily: 'monospace', fontWeight: 600 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontFamily: "monospace", fontWeight: 600 }}
+                    >
                       R: {parsed.r} G: {parsed.g} B: {parsed.b}
                     </Typography>
                     {parsed.a !== undefined && parsed.a !== 1 && (
-                      <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ fontFamily: "monospace" }}
+                      >
                         Alpha: {parsed.a}
                       </Typography>
                     )}
                   </Box>
                   {complementary && (
-                    <Box sx={{ ml: 'auto', textAlign: 'center' }}>
+                    <Box sx={{ ml: "auto", textAlign: "center" }}>
                       <Box
                         sx={{
-                          width: 32, height: 32, borderRadius: 1,
-                          border: '1px solid', borderColor: 'divider',
-                          backgroundColor: complementary, mx: 'auto', mb: 0.5,
+                          width: 32,
+                          height: 32,
+                          borderRadius: 1,
+                          border: "1px solid",
+                          borderColor: "divider",
+                          backgroundColor: complementary,
+                          mx: "auto",
+                          mb: 0.5,
                         }}
                       />
-                      <Typography variant="caption" color="text.secondary">Complement</Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        Complement
+                      </Typography>
                     </Box>
                   )}
                 </Stack>
@@ -94,49 +125,90 @@ export default function ColorTools() {
                 <Stack spacing={1}>
                   <Box>
                     <Stack direction="row" alignItems="center" spacing={1}>
-                      <Typography variant="caption" color="text.secondary" sx={{ minWidth: 60, fontWeight: 600 }}>
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{ minWidth: 60, fontWeight: 600 }}
+                      >
                         HEX
                       </Typography>
-                      <Typography variant="body2" sx={{ fontFamily: 'monospace', flex: 1 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ fontFamily: "monospace", flex: 1 }}
+                      >
                         {rgbToHex(parsed.r, parsed.g, parsed.b)}
                       </Typography>
-                      <CopyButton text={rgbToHex(parsed.r, parsed.g, parsed.b)} />
+                      <CopyButton
+                        text={rgbToHex(parsed.r, parsed.g, parsed.b)}
+                      />
                     </Stack>
                   </Box>
                   {parsed.a !== 1 && (
                     <Box>
                       <Stack direction="row" alignItems="center" spacing={1}>
-                        <Typography variant="caption" color="text.secondary" sx={{ minWidth: 60, fontWeight: 600 }}>
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          sx={{ minWidth: 60, fontWeight: 600 }}
+                        >
                           HEXA
                         </Typography>
-                        <Typography variant="body2" sx={{ fontFamily: 'monospace', flex: 1 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{ fontFamily: "monospace", flex: 1 }}
+                        >
                           {rgbaToHex(parsed.r, parsed.g, parsed.b, parsed.a)}
                         </Typography>
-                        <CopyButton text={rgbaToHex(parsed.r, parsed.g, parsed.b, parsed.a)} />
+                        <CopyButton
+                          text={rgbaToHex(
+                            parsed.r,
+                            parsed.g,
+                            parsed.b,
+                            parsed.a,
+                          )}
+                        />
                       </Stack>
                     </Box>
                   )}
                   <Box>
                     <Stack direction="row" alignItems="center" spacing={1}>
-                      <Typography variant="caption" color="text.secondary" sx={{ minWidth: 60, fontWeight: 600 }}>
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{ minWidth: 60, fontWeight: 600 }}
+                      >
                         RGB
                       </Typography>
-                      <Typography variant="body2" sx={{ fontFamily: 'monospace', flex: 1 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ fontFamily: "monospace", flex: 1 }}
+                      >
                         rgb({parsed.r}, {parsed.g}, {parsed.b})
                       </Typography>
-                      <CopyButton text={`rgb(${parsed.r}, ${parsed.g}, ${parsed.b})`} />
+                      <CopyButton
+                        text={`rgb(${parsed.r}, ${parsed.g}, ${parsed.b})`}
+                      />
                     </Stack>
                   </Box>
                   {hsl && (
                     <Box>
                       <Stack direction="row" alignItems="center" spacing={1}>
-                        <Typography variant="caption" color="text.secondary" sx={{ minWidth: 60, fontWeight: 600 }}>
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          sx={{ minWidth: 60, fontWeight: 600 }}
+                        >
                           HSL
                         </Typography>
-                        <Typography variant="body2" sx={{ fontFamily: 'monospace', flex: 1 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{ fontFamily: "monospace", flex: 1 }}
+                        >
                           hsl({hsl.h}, {hsl.s}%, {hsl.l}%)
                         </Typography>
-                        <CopyButton text={`hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`} />
+                        <CopyButton
+                          text={`hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`}
+                        />
                       </Stack>
                     </Box>
                   )}

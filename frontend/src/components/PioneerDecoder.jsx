@@ -35,7 +35,7 @@ export default function PioneerDecoder() {
   };
 
   return (
-    <Paper variant="outlined" sx={{ borderRadius: 1, overflow: 'hidden' }}>
+    <Paper variant="outlined" sx={{ borderRadius: 1, overflow: "hidden" }}>
       <Box sx={{ p: { xs: 1.5, sm: 2.5 } }}>
         <Typography variant="h6" fontWeight={700} gutterBottom>
           Pioneer Protocol Tools
@@ -50,7 +50,15 @@ export default function PioneerDecoder() {
           onChange={handleChange}
           variant="scrollable"
           scrollButtons="auto"
-          sx={{ mb: 2, minHeight: 0, '& .MuiTab-root': { textTransform: 'none', fontSize: '0.8rem', py: 1 } }}
+          sx={{
+            mb: 2,
+            minHeight: 0,
+            "& .MuiTab-root": {
+              textTransform: "none",
+              fontSize: "0.8rem",
+              py: 1,
+            },
+          }}
         >
           <Tab label="BLE 0x25 0x25 0x10" />
           <Tab label="Position 0x25 0x25 0x13" />

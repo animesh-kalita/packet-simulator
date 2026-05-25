@@ -22,7 +22,7 @@ export default function SimpleNavtelecomTabs() {
         variant="scrollable"
         scrollButtons="auto"
         aria-label="Navtelecom tools"
-        sx={{ borderBottom: 1, borderColor: 'divider' }}
+        sx={{ borderBottom: 1, borderColor: "divider" }}
       >
         <Tab label="Decoder" />
         <Tab label="GPS Generator" />

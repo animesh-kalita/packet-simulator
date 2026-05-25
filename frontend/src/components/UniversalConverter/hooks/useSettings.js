@@ -1,12 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
-const STORAGE_KEY = 'universal-converter-settings';
+const STORAGE_KEY = "universal-converter-settings";
 
 const DEFAULT_SETTINGS = {
-  endianness: 'big',
+  endianness: "big",
   signed: false,
   bitLength: 8,
-  byteSeparator: ' ',
+  byteSeparator: " ",
   activeConversionTab: 0,
   activeToolTab: null,
 };
@@ -17,12 +17,11 @@ export function useSettings() {
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-    } catch {
-    }
+    } catch {}
   }, [settings]);
 
   const updateSetting = useCallback((key, value) => {
-    setSettings(prev => ({ ...prev, [key]: value }));
+    setSettings((prev) => ({ ...prev, [key]: value }));
   }, []);
 
   const resetSettings = useCallback(() => {
@@ -39,7 +38,6 @@ function loadSettings() {
       const parsed = JSON.parse(stored);
       return { ...DEFAULT_SETTINGS, ...parsed };
     }
-  } catch {
-  }
+  } catch {}
   return { ...DEFAULT_SETTINGS };
 }

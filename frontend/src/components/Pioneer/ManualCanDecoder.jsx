@@ -77,7 +77,7 @@ export default function ManualCanDecoder() {
   // Rec 2: ID=0208FFFF (4 bytes), Len=08 (1 byte), Data=FFFFFFFFFFFFBBFF (8 bytes) -> Total 13 bytes
   // Header to Byte 22 is fixed. Byte 22 = 0x02 (2 records).
   const [rawInput, setRawInput] = useState(
-    "252544002E00010123456789101112260101100505021E0108FF08FFFFFFFFFFFFFFFF0208FFFF08FFFFFFFFFFFFBBFF"
+    "252544002E00010123456789101112260101100505021E0108FF08FFFFFFFFFFFFFFFF0208FFFF08FFFFFFFFFFFFBBFF",
   );
   const [newImei, setNewImei] = useState("");
 
@@ -115,7 +115,7 @@ export default function ManualCanDecoder() {
 
       const dataHex = clean.substring(
         (cursor + 4) * 2,
-        (cursor + 4 + dataLen) * 2
+        (cursor + 4 + dataLen) * 2,
       );
 
       records.push({
@@ -167,7 +167,7 @@ export default function ManualCanDecoder() {
       const newNumHex = intToHex(correctNum, 1);
 
       setRawInput(
-        beforeLen + newLenHex + afterLenBeforeNum + newNumHex + payload
+        beforeLen + newLenHex + afterLenBeforeNum + newNumHex + payload,
       );
     }
   };

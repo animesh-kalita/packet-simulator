@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useTheme } from '@mui/material/styles';
+import { useTheme } from "@mui/material/styles";
 import {
   Box,
   Typography,
@@ -35,7 +35,10 @@ const PacketTimeline = ({ parsingSteps, currentStepIndex, onStepChange }) => {
       return;
     }
 
-    if (parsingSteps.length === 0 || currentStepIndex >= parsingSteps.length - 1) {
+    if (
+      parsingSteps.length === 0 ||
+      currentStepIndex >= parsingSteps.length - 1
+    ) {
       setIsPlaying(false);
       return;
     }
@@ -59,7 +62,7 @@ const PacketTimeline = ({ parsingSteps, currentStepIndex, onStepChange }) => {
   }, [isPlaying, speed, parsingSteps.length]);
 
   const playPause = () => {
-    setIsPlaying(prev => !prev);
+    setIsPlaying((prev) => !prev);
   };
 
   const stepForward = () => {
@@ -86,7 +89,8 @@ const PacketTimeline = ({ parsingSteps, currentStepIndex, onStepChange }) => {
           No parsing steps available
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Load a packet in the Packet Input Panel and step through the ByteBuf Visualizer to generate steps
+          Load a packet in the Packet Input Panel and step through the ByteBuf
+          Visualizer to generate steps
         </Typography>
       </Box>
     );
@@ -206,13 +210,16 @@ const PacketTimeline = ({ parsingSteps, currentStepIndex, onStepChange }) => {
               {/* Step connector (except for last step) */}
               {index < parsingSteps.length - 1 && (
                 <Box
-              sx={{
-                position: "absolute",
-                left: 20,
-                top: index * 64 + 24,
-                height: 24,
-                width: 2,
-                bgcolor: index < currentStepIndex ? theme.palette.success.main : theme.palette.action.disabledBackground,
+                  sx={{
+                    position: "absolute",
+                    left: 20,
+                    top: index * 64 + 24,
+                    height: 24,
+                    width: 2,
+                    bgcolor:
+                      index < currentStepIndex
+                        ? theme.palette.success.main
+                        : theme.palette.action.disabledBackground,
                   }}
                 />
               )}
@@ -311,7 +318,11 @@ const PacketTimeline = ({ parsingSteps, currentStepIndex, onStepChange }) => {
 
         {/* Current Step Explanation */}
         {parsingSteps[currentStepIndex] && (
-          <Box mt={3} p={2} sx={{ bgcolor: 'action.selected', borderRadius: 1 }}>
+          <Box
+            mt={3}
+            p={2}
+            sx={{ bgcolor: "action.selected", borderRadius: 1 }}
+          >
             <Typography variant="h6" gutterBottom>
               Current Step Explanation
             </Typography>

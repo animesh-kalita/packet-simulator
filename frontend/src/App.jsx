@@ -50,7 +50,7 @@ function App() {
           },
         },
       }),
-    [darkMode]
+    [darkMode],
   );
 
   const toggleTheme = () => {

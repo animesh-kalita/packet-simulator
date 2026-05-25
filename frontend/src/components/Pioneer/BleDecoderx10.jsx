@@ -103,7 +103,7 @@ export default function BleDecoder() {
   // Sample: Header + 0001 (Tire) + 1 Tire Record (10 bytes)
   // Header(22) + Code(2) + Payload(10) = 34 bytes (68 chars)
   const [rawInput, setRawInput] = useState(
-    "25251000220001088061689888888800000000000001000104B3EC0024CE9F0F6800"
+    "25251000220001088061689888888800000000000001000104B3EC0024CE9F0F6800",
   );
   const [newImei, setNewImei] = useState("");
 
@@ -112,7 +112,7 @@ export default function BleDecoder() {
   // Detect BLE Type
   const bleCodeHex = clean.substring(
     (BLE_CODE_START - 1) * 2,
-    BLE_CODE_END * 2
+    BLE_CODE_END * 2,
   );
   const isTireSensor = bleCodeHex === "0001";
 
@@ -290,15 +290,15 @@ export default function BleDecoder() {
                   item.type === "int"
                     ? "number"
                     : item.type === "date"
-                    ? "datetime-local"
-                    : "text"
+                      ? "datetime-local"
+                      : "text"
                 }
                 onChange={(e) =>
                   handleValueChange(
                     item.type,
                     item.start,
                     item.end,
-                    e.target.value
+                    e.target.value,
                   )
                 }
                 InputLabelProps={{ shrink: true }}
@@ -336,7 +336,7 @@ export default function BleDecoder() {
                   "hex",
                   BLE_CODE_START,
                   BLE_CODE_END,
-                  e.target.value
+                  e.target.value,
                 )
               }
             >
@@ -414,7 +414,7 @@ export default function BleDecoder() {
                               f.type,
                               start,
                               end,
-                              e.target.value
+                              e.target.value,
                             )
                           }
                           InputLabelProps={{ shrink: true }}

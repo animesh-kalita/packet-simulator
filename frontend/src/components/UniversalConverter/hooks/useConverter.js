@@ -1,16 +1,27 @@
-import { useState, useMemo, useCallback } from 'react';
-import { parseInput, autoDetectFormat } from '../utils/parsers';
+import { useState, useMemo, useCallback } from "react";
+import { parseInput, autoDetectFormat } from "../utils/parsers";
 import {
-  bytesToHex, bytesToBinary, bytesToDecimal, bytesToOctal,
-  bytesToASCII, bytesToUTF8, bytesToUTF16, bytesToBase64,
-  bytesToByteArray, bytesToSignedInt, bytesToUnsignedInt,
-  bytesToFloat32, bytesToFloat64, getFloat32Bits, getFloat64Bits,
+  bytesToHex,
+  bytesToBinary,
+  bytesToDecimal,
+  bytesToOctal,
+  bytesToASCII,
+  bytesToUTF8,
+  bytesToUTF16,
+  bytesToBase64,
+  bytesToByteArray,
+  bytesToSignedInt,
+  bytesToUnsignedInt,
+  bytesToFloat32,
+  bytesToFloat64,
+  getFloat32Bits,
+  getFloat64Bits,
   computeByteStatistics,
-} from '../utils/converters';
-import { INPUT_FORMATS } from '../utils/constants';
+} from "../utils/converters";
+import { INPUT_FORMATS } from "../utils/constants";
 
 export function useConverter(initialSettings) {
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [formatOverride, setFormatOverride] = useState(null);
   const [settings, setSettings] = useState(initialSettings);
 
@@ -29,7 +40,7 @@ export function useConverter(initialSettings) {
   }, []);
 
   const parseResult = useMemo(() => {
-    if (!input || input.trim() === '') {
+    if (!input || input.trim() === "") {
       return { bytes: null, error: null, detection };
     }
     return parseInput(input, effectiveFormat, settings.endianness);
@@ -41,7 +52,10 @@ export function useConverter(initialSettings) {
 
     const res = {};
 
-    res.hex = bytesToHex(bytes, { separator: settings.byteSeparator, upperCase: true });
+    res.hex = bytesToHex(bytes, {
+      separator: settings.byteSeparator,
+      upperCase: true,
+    });
     res.binary = bytesToBinary(bytes, { separator: settings.byteSeparator });
     res.decimal = bytesToDecimal(bytes, { separator: settings.byteSeparator });
     res.octal = bytesToOctal(bytes, { separator: settings.byteSeparator });
@@ -64,7 +78,9 @@ export function useConverter(initialSettings) {
     }
 
     if (bytes.length === 4) {
-      res.float32Bits = getFloat32Bits(bytesToFloat32(bytes, settings.endianness));
+      res.float32Bits = getFloat32Bits(
+        bytesToFloat32(bytes, settings.endianness),
+      );
     }
 
     res.byteStats = computeByteStatistics(bytes);
@@ -79,7 +95,7 @@ export function useConverter(initialSettings) {
   }, []);
 
   const handleFormatOverride = useCallback((format) => {
-    setFormatOverride(prev => prev === format ? null : format);
+    setFormatOverride((prev) => (prev === format ? null : format));
   }, []);
 
   const clearFormatOverride = useCallback(() => {
@@ -87,11 +103,11 @@ export function useConverter(initialSettings) {
   }, []);
 
   const updateSetting = useCallback((key, value) => {
-    setSettings(prev => ({ ...prev, [key]: value }));
+    setSettings((prev) => ({ ...prev, [key]: value }));
   }, []);
 
   const clearInput = useCallback(() => {
-    setInput('');
+    setInput("");
   }, []);
 
   const bytes = parseResult.bytes;

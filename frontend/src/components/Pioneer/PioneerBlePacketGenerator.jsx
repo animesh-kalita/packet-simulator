@@ -46,7 +46,7 @@ const floatToHexBytes = (value) => {
   const buffer = new ArrayBuffer(4);
   new DataView(buffer).setFloat32(0, value, false);
   return [...new Uint8Array(buffer)].map((b) =>
-    b.toString(16).padStart(2, "0").toUpperCase()
+    b.toString(16).padStart(2, "0").toUpperCase(),
   );
 };
 
@@ -139,7 +139,7 @@ export default function PioneerBlePacketGenerator() {
       toHex(date.dd),
       toHex(date.hh),
       toHex(date.min),
-      toHex(date.ss)
+      toHex(date.ss),
     );
 
     // ACC
@@ -159,7 +159,7 @@ export default function PioneerBlePacketGenerator() {
         toHex((sos.tagId >> 24) & 0xff),
         toHex((sos.tagId >> 16) & 0xff),
         toHex((sos.tagId >> 8) & 0xff),
-        toHex(sos.tagId & 0xff)
+        toHex(sos.tagId & 0xff),
       );
 
       // Battery Voltage

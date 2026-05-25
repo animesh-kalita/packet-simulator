@@ -71,7 +71,7 @@ const ConcoxLoginPacketDecoder = () => {
       const crcData = packet.substring(4, packet.length - 8);
       const providedCRC = packet.substring(
         packet.length - 8,
-        packet.length - 4
+        packet.length - 4,
       );
 
       const bytes = [];
@@ -144,7 +144,7 @@ const ConcoxLoginPacketDecoder = () => {
       // Validate packet type
       if (packetType !== "01") {
         setError(
-          "Not a login packet. Packet type: " + packetType + " (expected 01)"
+          "Not a login packet. Packet type: " + packetType + " (expected 01)",
         );
         setDecodedData(null);
         return;

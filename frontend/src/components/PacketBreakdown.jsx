@@ -20,7 +20,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 export default function PacketBreakdown() {
   const [hexInput, setHexInput] = useState(
-    "000000000000007a08010000019aed154ee0012b2fee7d0e694e6f00ed00c7140000f01a07ef00f000150545010100b300ca1b0eb50009b6000642300f180000cde77bce14f3430fa34400000900d911ffc412ffb813ffe8c90267cb000003f100009e32c700000000100585704b020b00000000359895a60e00000001641f11020100009ebe"
+    "000000000000007a08010000019aed154ee0012b2fee7d0e694e6f00ed00c7140000f01a07ef00f000150545010100b300ca1b0eb50009b6000642300f180000cde77bce14f3430fa34400000900d911ffc412ffb813ffe8c90267cb000003f100009e32c700000000100585704b020b00000000359895a60e00000001641f11020100009ebe",
   );
   const [breakdown, setBreakdown] = useState(null);
 
@@ -41,7 +41,7 @@ export default function PacketBreakdown() {
       length,
       description,
       value = null,
-      color = "default"
+      color = "default",
     ) => {
       const hexData = hex.substr(byteOffset * 2, length * 2);
       sections.push({
@@ -65,7 +65,7 @@ export default function PacketBreakdown() {
       4,
       "Start marker (always 00000000)",
       "00000000",
-      "info"
+      "info",
     );
 
     // Data length
@@ -74,7 +74,7 @@ export default function PacketBreakdown() {
       4,
       "Length of data field in bytes",
       null,
-      "primary"
+      "primary",
     );
     const dataLength =
       (bytes[4] << 24) | (bytes[5] << 16) | (bytes[6] << 8) | bytes[7];
@@ -86,7 +86,7 @@ export default function PacketBreakdown() {
       1,
       "Protocol version identifier",
       null,
-      "secondary"
+      "secondary",
     );
     const codecId = bytes[8];
     sections[sections.length - 1].value = `0x${codecHex} (Codec ${codecId})`;
@@ -97,7 +97,7 @@ export default function PacketBreakdown() {
       1,
       "How many data records in this packet",
       null,
-      "success"
+      "success",
     );
     const numRecords = bytes[9];
     sections[sections.length - 1].value = `${numRecords} record(s)`;
@@ -119,12 +119,11 @@ export default function PacketBreakdown() {
       8,
       "Unix timestamp in milliseconds",
       null,
-      "info"
+      "info",
     );
     const date = new Date(timestamp);
-    sections[
-      sections.length - 1
-    ].value = `${timestamp}ms → ${date.toISOString()}`;
+    sections[sections.length - 1].value =
+      `${timestamp}ms → ${date.toISOString()}`;
 
     // Priority
     const priorityHex = addSection(
@@ -132,7 +131,7 @@ export default function PacketBreakdown() {
       1,
       "Data priority level (0=Low, 1=High, 2=Panic)",
       null,
-      "default"
+      "default",
     );
     sections[sections.length - 1].value = `Level ${bytes[offset - 1]}`;
 
@@ -156,7 +155,7 @@ export default function PacketBreakdown() {
       4,
       "Longitude coordinate (signed int / 10,000,000)",
       `${lonRaw} → ${longitude.toFixed(7)}° E`,
-      "success"
+      "success",
     );
 
     // Latitude
@@ -172,7 +171,7 @@ export default function PacketBreakdown() {
       4,
       "Latitude coordinate (signed int / 10,000,000)",
       `${latRaw} → ${latitude.toFixed(7)}° N`,
-      "success"
+      "success",
     );
 
     // Altitude
@@ -182,7 +181,7 @@ export default function PacketBreakdown() {
       2,
       "Height above sea level in meters",
       `${altitude} meters`,
-      "success"
+      "success",
     );
 
     // Angle
@@ -192,7 +191,7 @@ export default function PacketBreakdown() {
       2,
       "Movement direction (0-360°, 0=North, clockwise)",
       `${angle}°`,
-      "success"
+      "success",
     );
 
     // Satellites
@@ -202,7 +201,7 @@ export default function PacketBreakdown() {
       1,
       "Number of visible GPS satellites",
       `${satellites} satellites`,
-      "success"
+      "success",
     );
 
     // Speed
@@ -212,7 +211,7 @@ export default function PacketBreakdown() {
       2,
       "Movement speed in km/h",
       `${speed} km/h`,
-      "success"
+      "success",
     );
 
     // IO Element Header
@@ -229,7 +228,7 @@ export default function PacketBreakdown() {
       1,
       "Which IO element triggered this record",
       eventId === 0 ? "0 (No event - periodic record)" : `IO ${eventId}`,
-      "secondary"
+      "secondary",
     );
 
     // Total elements
@@ -239,7 +238,7 @@ export default function PacketBreakdown() {
       1,
       "Total number of IO elements in this record",
       `${totalElements} elements`,
-      "secondary"
+      "secondary",
     );
 
     // 1-byte IO elements
@@ -249,7 +248,7 @@ export default function PacketBreakdown() {
       1,
       "Number of IO elements with 1-byte values",
       `${num1Byte} element(s)`,
-      "secondary"
+      "secondary",
     );
 
     for (let i = 0; i < num1Byte; i++) {
@@ -260,7 +259,7 @@ export default function PacketBreakdown() {
         1,
         `IO element identifier`,
         `ID ${ioId}`,
-        "secondary"
+        "secondary",
       );
 
       let interpretation = `0x${ioValue
@@ -278,7 +277,7 @@ export default function PacketBreakdown() {
         1,
         `Value for IO element ${ioId}`,
         interpretation,
-        "secondary"
+        "secondary",
       );
     }
 
@@ -289,7 +288,7 @@ export default function PacketBreakdown() {
       1,
       "Number of IO elements with 2-byte values",
       `${num2Byte} element(s)`,
-      "secondary"
+      "secondary",
     );
 
     for (let i = 0; i < num2Byte; i++) {
@@ -300,14 +299,14 @@ export default function PacketBreakdown() {
         1,
         `IO element identifier`,
         `ID ${ioId}`,
-        "secondary"
+        "secondary",
       );
       addSection(
         `  IO Value ${ioId}`,
         2,
         `Value for IO element ${ioId}`,
         `0x${ioValue.toString(16).padStart(4, "0")} (${ioValue})`,
-        "secondary"
+        "secondary",
       );
     }
 
@@ -318,7 +317,7 @@ export default function PacketBreakdown() {
       1,
       "Number of IO elements with 4-byte values",
       `${num4Byte} element(s)`,
-      "secondary"
+      "secondary",
     );
 
     for (let i = 0; i < num4Byte; i++) {
@@ -333,14 +332,14 @@ export default function PacketBreakdown() {
         1,
         `IO element identifier`,
         `ID ${ioId}`,
-        "secondary"
+        "secondary",
       );
       addSection(
         `  IO Value ${ioId}`,
         4,
         `Value for IO element ${ioId}`,
         `0x${ioValue.toString(16).padStart(8, "0")} (${ioValue})`,
-        "secondary"
+        "secondary",
       );
     }
 
@@ -351,7 +350,7 @@ export default function PacketBreakdown() {
       1,
       "Number of IO elements with 8-byte values",
       `${num8Byte} element(s)`,
-      "secondary"
+      "secondary",
     );
 
     for (let i = 0; i < num8Byte; i++) {
@@ -365,14 +364,14 @@ export default function PacketBreakdown() {
         1,
         `IO element identifier`,
         `ID ${ioId}`,
-        "secondary"
+        "secondary",
       );
       addSection(
         `  IO Value ${ioId}`,
         8,
         `Value for IO element ${ioId}`,
         `${ioValue}`,
-        "secondary"
+        "secondary",
       );
     }
 
@@ -390,7 +389,7 @@ export default function PacketBreakdown() {
         1,
         "Record count must match the earlier count",
         `${recordsConfirm} record(s)`,
-        "success"
+        "success",
       );
     }
 
@@ -403,7 +402,7 @@ export default function PacketBreakdown() {
         remaining,
         "Checksum for data integrity verification",
         `0x${crcHex}`,
-        "error"
+        "error",
       );
     }
 

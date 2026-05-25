@@ -216,7 +216,11 @@ const PacketInputPanel = ({ onPacketChange, onTemplateLoad }) => {
 
         {/* Data Info */}
         {inputData && (
-          <Box mt={3} p={2} sx={{ bgcolor: 'action.selected', borderRadius: 1 }}>
+          <Box
+            mt={3}
+            p={2}
+            sx={{ bgcolor: "action.selected", borderRadius: 1 }}
+          >
             <Typography variant="h6" gutterBottom>
               Packet Information
             </Typography>

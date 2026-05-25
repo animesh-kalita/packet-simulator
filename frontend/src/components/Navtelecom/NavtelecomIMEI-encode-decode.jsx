@@ -254,7 +254,7 @@ export default function NavtelecomIMEITool() {
                 value={hexString}
                 onChange={(e) =>
                   setHexString(
-                    e.target.value.toLowerCase().replace(/[^0-9a-f]/g, "")
+                    e.target.value.toLowerCase().replace(/[^0-9a-f]/g, ""),
                   )
                 }
                 placeholder="404e544301000000000000001300..."

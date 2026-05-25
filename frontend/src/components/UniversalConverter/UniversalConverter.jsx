@@ -1,30 +1,42 @@
-import { useState, useCallback } from 'react';
-import { Paper, Typography, Box, Divider, Alert } from '@mui/material';
-import InputPanel from './components/InputPanel';
-import ConversionPanel from './components/ConversionPanel';
-import FloatVisualizer from './components/FloatVisualizer';
-import BitInspector from './components/BitInspector';
-import TimestampTools from './components/TimestampTools';
-import ColorTools from './components/ColorTools';
-import EncodingTools from './components/EncodingTools';
-import HashTools from './components/HashTools';
-import { useConverter } from './hooks/useConverter';
-import { useSettings } from './hooks/useSettings';
+import { useState, useCallback } from "react";
+import { Paper, Typography, Box, Divider, Alert } from "@mui/material";
+import InputPanel from "./components/InputPanel";
+import ConversionPanel from "./components/ConversionPanel";
+import FloatVisualizer from "./components/FloatVisualizer";
+import BitInspector from "./components/BitInspector";
+import TimestampTools from "./components/TimestampTools";
+import ColorTools from "./components/ColorTools";
+import EncodingTools from "./components/EncodingTools";
+import HashTools from "./components/HashTools";
+import { useConverter } from "./hooks/useConverter";
+import { useSettings } from "./hooks/useSettings";
 
 export default function UniversalConverter() {
   const { settings, updateSetting } = useSettings();
   const {
-    input, setInput, clearInput, format, formatOverride,
-    setFormatOverride, detection, bytes, error, results,
-    settings: converterSettings, updateSetting: updateConverterSetting,
+    input,
+    setInput,
+    clearInput,
+    format,
+    formatOverride,
+    setFormatOverride,
+    detection,
+    bytes,
+    error,
+    results,
+    settings: converterSettings,
+    updateSetting: updateConverterSetting,
   } = useConverter(settings);
 
   const [activeTab, setActiveTab] = useState(0);
 
-  const handleUpdateSetting = useCallback((key, value) => {
-    updateSetting(key, value);
-    updateConverterSetting(key, value);
-  }, [updateSetting, updateConverterSetting]);
+  const handleUpdateSetting = useCallback(
+    (key, value) => {
+      updateSetting(key, value);
+      updateConverterSetting(key, value);
+    },
+    [updateSetting, updateConverterSetting],
+  );
 
   return (
     <Paper
@@ -33,16 +45,17 @@ export default function UniversalConverter() {
         p: { xs: 1.5, sm: 2.5 },
         m: { xs: 0.5, sm: 1 },
         borderRadius: 2,
-        border: '1px solid',
-        borderColor: 'divider',
+        border: "1px solid",
+        borderColor: "divider",
       }}
     >
       <Box sx={{ mb: 2.5 }}>
-        <Typography variant="h6" fontWeight={700} sx={{ fontSize: '1.15rem' }}>
+        <Typography variant="h6" fontWeight={700} sx={{ fontSize: "1.15rem" }}>
           Universal Data Converter
         </Typography>
         <Typography variant="caption" color="text.secondary">
-          Developer conversion playground — Hex, Binary, Decimal, ASCII, Base64, IEEE754, Timestamps, Colors & more
+          Developer conversion playground — Hex, Binary, Decimal, ASCII, Base64,
+          IEEE754, Timestamps, Colors & more
         </Typography>
       </Box>
 
@@ -87,7 +100,9 @@ export default function UniversalConverter() {
       />
 
       <Divider sx={{ my: 1.5 }}>
-        <Typography variant="caption" color="text.secondary">Developer Tools</Typography>
+        <Typography variant="caption" color="text.secondary">
+          Developer Tools
+        </Typography>
       </Divider>
 
       <TimestampTools />

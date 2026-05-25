@@ -56,7 +56,7 @@ const SCHEMA = [
 export default function LoginDecoder() {
   // Sample from Doc: 2525 01 0017 0001 0880616898888888 1016 010207 1101 11
   const [rawInput, setRawInput] = useState(
-    "2525010017000108806168988888881016010207110111"
+    "2525010017000108806168988888881016010207110111",
   );
   const [newImei, setNewImei] = useState("");
 

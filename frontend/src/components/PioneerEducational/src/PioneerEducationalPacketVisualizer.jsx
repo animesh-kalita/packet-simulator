@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Typography, Tabs, Tab, Stack } from '@mui/material';
-import PacketInputPanel from './components/PacketInputPanel';
-import ByteBufVisualizer from './components/ByteBufVisualizer';
-import PacketClassifier from './components/PacketClassifier';
-import PacketTimeline from './components/PacketTimeline';
-import IMEIEditor from './components/IMEIEditor';
-import PacketStructureMap from './components/PacketStructureMap';
-import ParsingExplanationPanel from './components/ParsingExplanationPanel';
-import ParsingFlowGraph from './components/ParsingFlowGraph';
-import AckVisualizer from './components/AckVisualizer';
+import React, { useState, useEffect } from "react";
+import { Box, Typography, Tabs, Tab, Stack } from "@mui/material";
+import PacketInputPanel from "./components/PacketInputPanel";
+import ByteBufVisualizer from "./components/ByteBufVisualizer";
+import PacketClassifier from "./components/PacketClassifier";
+import PacketTimeline from "./components/PacketTimeline";
+import IMEIEditor from "./components/IMEIEditor";
+import PacketStructureMap from "./components/PacketStructureMap";
+import ParsingExplanationPanel from "./components/ParsingExplanationPanel";
+import ParsingFlowGraph from "./components/ParsingFlowGraph";
+import AckVisualizer from "./components/AckVisualizer";
 
 // Rename App to PioneerEducationalPacketVisualizer for modularity
 function PioneerEducationalPacketVisualizer() {
-  const [packetData, setPacketData] = useState('');
+  const [packetData, setPacketData] = useState("");
   const [currentStep, setCurrentStep] = useState(0);
   const [packetType, setPacketType] = useState(null);
   const [selectedTab, setSelectedTab] = useState(0); // New state for tab selection
@@ -35,7 +35,7 @@ function PioneerEducationalPacketVisualizer() {
   // Update packet type based on classification (simplified, will be replaced by real classifier)
   useEffect(() => {
     if (packetData) {
-      const cleaned = packetData.replace(/\s/g, '');
+      const cleaned = packetData.replace(/\s/g, "");
       if (cleaned.length >= 8) {
         try {
           // Simple heuristic to determine packet type from first few bytes (placeholder)
@@ -77,8 +77,8 @@ function PioneerEducationalPacketVisualizer() {
     />,
     <IMEIEditor
       packetBytes={[]} // Placeholder
-      onIMEIChange={(imei) => console.log('IMEI changed:', imei)}
-      onPacketUpdate={(bytes) => console.log('Packet updated:', bytes)}
+      onIMEIChange={(imei) => console.log("IMEI changed:", imei)}
+      onPacketUpdate={(bytes) => console.log("Packet updated:", bytes)}
       key="imei"
     />,
     <ParsingExplanationPanel
@@ -105,7 +105,12 @@ function PioneerEducationalPacketVisualizer() {
         <Typography variant="h4" align="center" gutterBottom>
           Pioneer GPS Protocol Packet Visualizer
         </Typography>
-        <Typography variant="h6" align="center" color="text.secondary" gutterBottom>
+        <Typography
+          variant="h6"
+          align="center"
+          color="text.secondary"
+          gutterBottom
+        >
           Interactive Educational Tool for Netty ByteBuf Parsing
         </Typography>
       </Box>
@@ -119,7 +124,11 @@ function PioneerEducationalPacketVisualizer() {
       {/* Main Content Tabs */}
       {packetData && (
         <Box>
-          <Tabs value={selectedTab} onChange={handleTabChange} sx={{ width: '100%' }}>
+          <Tabs
+            value={selectedTab}
+            onChange={handleTabChange}
+            sx={{ width: "100%" }}
+          >
             <Tab label="Packet Classification" />
             <Tab label="ByteBuf Visualizer" />
             <Tab label="Parsing Timeline" />
@@ -130,7 +139,15 @@ function PioneerEducationalPacketVisualizer() {
             <Tab label="ACK Response" />
           </Tabs>
 
-          <Box sx={{ mt: 3, p: 3, border: '1px solid', borderColor: 'grey.300', borderRadius: 1 }}>
+          <Box
+            sx={{
+              mt: 3,
+              p: 3,
+              border: "1px solid",
+              borderColor: "grey.300",
+              borderRadius: 1,
+            }}
+          >
             {tabComponents[selectedTab]}
           </Box>
         </Box>

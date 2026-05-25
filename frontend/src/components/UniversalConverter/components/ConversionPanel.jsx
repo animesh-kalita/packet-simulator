@@ -1,20 +1,32 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo } from "react";
 import {
-  Paper, Tabs, Tab, Box, Stack, Typography, Divider, Chip, Table,
-  TableBody, TableCell, TableContainer, TableRow, Tooltip,
-} from '@mui/material';
-import CopyButton from './CopyButton';
+  Paper,
+  Tabs,
+  Tab,
+  Box,
+  Stack,
+  Typography,
+  Divider,
+  Chip,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Tooltip,
+} from "@mui/material";
+import CopyButton from "./CopyButton";
 
 function OutputRow({ label, value, mono = true }) {
   if (value === null || value === undefined) return null;
-  const display = typeof value === 'number' ? String(value) : String(value);
+  const display = typeof value === "number" ? String(value) : String(value);
   return (
     <Box>
       <Stack direction="row" alignItems="center" spacing={1}>
         <Typography
           variant="caption"
           color="text.secondary"
-          sx={{ minWidth: 100, fontWeight: 600, fontSize: '0.75rem' }}
+          sx={{ minWidth: 100, fontWeight: 600, fontSize: "0.75rem" }}
         >
           {label}
         </Typography>
@@ -22,20 +34,26 @@ function OutputRow({ label, value, mono = true }) {
           <Typography
             variant="body2"
             sx={{
-              fontFamily: mono ? 'monospace' : 'inherit',
-              fontSize: '0.85rem',
-              wordBreak: 'break-all',
-              bgcolor: 'action.hover',
+              fontFamily: mono ? "monospace" : "inherit",
+              fontSize: "0.85rem",
+              wordBreak: "break-all",
+              bgcolor: "action.hover",
               px: 1.5,
               py: 0.8,
               borderRadius: 0.5,
-              border: '1px solid',
-              borderColor: 'divider',
+              border: "1px solid",
+              borderColor: "divider",
             }}
           >
-            {display.length > 1000 ? display.substring(0, 1000) + '...' : display}
+            {display.length > 1000
+              ? display.substring(0, 1000) + "..."
+              : display}
             {display.length > 1000 && (
-              <Chip label={`+${display.length - 1000} chars`} size="small" sx={{ ml: 1 }} />
+              <Chip
+                label={`+${display.length - 1000} chars`}
+                size="small"
+                sx={{ ml: 1 }}
+              />
             )}
           </Typography>
         </Box>
@@ -81,41 +99,64 @@ function TextTab({ results }) {
 function ByteStatsTab({ results }) {
   const stats = results.byteStats;
   if (!stats) {
-    return <Typography variant="body2" color="text.secondary">No statistics available</Typography>;
+    return (
+      <Typography variant="body2" color="text.secondary">
+        No statistics available
+      </Typography>
+    );
   }
 
   return (
     <Stack spacing={1.5}>
-      <TableContainer component={Paper} variant="outlined" sx={{ maxWidth: 500 }}>
+      <TableContainer
+        component={Paper}
+        variant="outlined"
+        sx={{ maxWidth: 500 }}
+      >
         <Table size="small">
           <TableBody>
             <TableRow>
               <TableCell sx={{ fontWeight: 600 }}>Length</TableCell>
-              <TableCell sx={{ fontFamily: 'monospace' }}>{stats.length} bytes</TableCell>
+              <TableCell sx={{ fontFamily: "monospace" }}>
+                {stats.length} bytes
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell sx={{ fontWeight: 600 }}>Min / Max</TableCell>
-              <TableCell sx={{ fontFamily: 'monospace' }}>0x{stats.min.toString(16).padStart(2, '0').toUpperCase()} / 0x{stats.max.toString(16).padStart(2, '0').toUpperCase()}</TableCell>
+              <TableCell sx={{ fontFamily: "monospace" }}>
+                0x{stats.min.toString(16).padStart(2, "0").toUpperCase()} / 0x
+                {stats.max.toString(16).padStart(2, "0").toUpperCase()}
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell sx={{ fontWeight: 600 }}>Sum</TableCell>
-              <TableCell sx={{ fontFamily: 'monospace' }}>{stats.sum}</TableCell>
+              <TableCell sx={{ fontFamily: "monospace" }}>
+                {stats.sum}
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell sx={{ fontWeight: 600 }}>Mean</TableCell>
-              <TableCell sx={{ fontFamily: 'monospace' }}>{stats.mean}</TableCell>
+              <TableCell sx={{ fontFamily: "monospace" }}>
+                {stats.mean}
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell sx={{ fontWeight: 600 }}>Std Dev</TableCell>
-              <TableCell sx={{ fontFamily: 'monospace' }}>{stats.stdDev}</TableCell>
+              <TableCell sx={{ fontFamily: "monospace" }}>
+                {stats.stdDev}
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell sx={{ fontWeight: 600 }}>Entropy</TableCell>
-              <TableCell sx={{ fontFamily: 'monospace' }}>{stats.entropy} bits/byte</TableCell>
+              <TableCell sx={{ fontFamily: "monospace" }}>
+                {stats.entropy} bits/byte
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell sx={{ fontWeight: 600 }}>Unique Values</TableCell>
-              <TableCell sx={{ fontFamily: 'monospace' }}>{stats.unique} / 256</TableCell>
+              <TableCell sx={{ fontFamily: "monospace" }}>
+                {stats.unique} / 256
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -124,12 +165,17 @@ function ByteStatsTab({ results }) {
   );
 }
 
-export default function ConversionPanel({ results, bytes, activeTab, onTabChange }) {
+export default function ConversionPanel({
+  results,
+  bytes,
+  activeTab,
+  onTabChange,
+}) {
   const tabs = useMemo(() => {
     const t = [
-      { label: 'Numeric', value: 0 },
-      { label: 'Text / Encoded', value: 1 },
-      { label: 'Byte Stats', value: 2 },
+      { label: "Numeric", value: 0 },
+      { label: "Text / Encoded", value: 1 },
+      { label: "Byte Stats", value: 2 },
     ];
     return t;
   }, []);
@@ -151,10 +197,14 @@ export default function ConversionPanel({ results, bytes, activeTab, onTabChange
         onChange={(_, v) => onTabChange(v)}
         variant="scrollable"
         scrollButtons="auto"
-        sx={{ borderBottom: 1, borderColor: 'divider', px: 1 }}
+        sx={{ borderBottom: 1, borderColor: "divider", px: 1 }}
       >
-        {tabs.map(tab => (
-          <Tab key={tab.value} label={tab.label} sx={{ textTransform: 'none', fontWeight: 600 }} />
+        {tabs.map((tab) => (
+          <Tab
+            key={tab.value}
+            label={tab.label}
+            sx={{ textTransform: "none", fontWeight: 600 }}
+          />
         ))}
       </Tabs>
       <Box sx={{ p: 2.5 }}>

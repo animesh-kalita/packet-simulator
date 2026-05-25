@@ -20,7 +20,7 @@ const cleanHex = (h) => (h || "").replace(/\s/g, "").toUpperCase();
 const hexToFloatLE = (hex) => {
   if (!hex || hex.length !== 8) return 0;
   const bytes = new Uint8Array(
-    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
+    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)),
   );
   const view = new DataView(bytes.buffer);
   return parseFloat(view.getFloat32(0, true).toFixed(6));
@@ -121,7 +121,7 @@ export default function AccidentDecoder() {
   // Sample: Header + 2 Records
   // Record 1: 00..Time.. Status.. Accel.. Alt.. Lon.. Lat.. Speed.. Dir
   const [rawInput, setRawInput] = useState(
-    "252507003C000101234567891011128826010517042900000000000858866B4276D6E342912AB4411115050526020204492500890908998958866B4276D6E342912AB44111150505"
+    "252507003C000101234567891011128826010517042900000000000858866B4276D6E342912AB4411115050526020204492500890908998958866B4276D6E342912AB44111150505",
   );
   const [newImei, setNewImei] = useState("");
 
@@ -306,7 +306,7 @@ export default function AccidentDecoder() {
                     item.type,
                     item.start,
                     item.end,
-                    e.target.value
+                    e.target.value,
                   )
                 }
                 InputLabelProps={{ shrink: true }}
@@ -373,8 +373,8 @@ export default function AccidentDecoder() {
                         field.type === "speed_nibble"
                           ? "number"
                           : field.type === "date"
-                          ? "datetime-local"
-                          : "text"
+                            ? "datetime-local"
+                            : "text"
                       }
                       value={displayValue}
                       onChange={(e) =>
@@ -382,7 +382,7 @@ export default function AccidentDecoder() {
                           field.type,
                           start,
                           end,
-                          e.target.value
+                          e.target.value,
                         )
                       }
                       InputLabelProps={{ shrink: true }}
@@ -391,8 +391,8 @@ export default function AccidentDecoder() {
                           field.type === "date"
                             ? "1"
                             : field.type === "float"
-                            ? "0.000001"
-                            : "0.1",
+                              ? "0.000001"
+                              : "0.1",
                       }}
                     />
                     <Typography

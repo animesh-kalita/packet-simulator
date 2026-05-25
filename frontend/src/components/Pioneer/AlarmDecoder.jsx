@@ -18,7 +18,7 @@ const cleanHex = (h) => (h || "").replace(/\s/g, "").toUpperCase();
 const hexToFloatLE = (hex) => {
   if (!hex || hex.length !== 8) return 0;
   const bytes = new Uint8Array(
-    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
+    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)),
   );
   const view = new DataView(bytes.buffer);
   return parseFloat(view.getFloat32(0, true).toFixed(6));
@@ -119,7 +119,7 @@ const SCHEMA = [
 
 export default function AlarmDecoder() {
   const [rawInput, setRawInput] = useState(
-    "2525140059020d0867284063992640000a001e1e00000041490000050000000000000000000000ffffffffffff17d5000186cb8926010901320766e64243b1489a428d68e541000000f003871250ffffff0000160001ffffff"
+    "2525140059020d0867284063992640000a001e1e00000041490000050000000000000000000000ffffffffffff17d5000186cb8926010901320766e64243b1489a428d68e541000000f003871250ffffff0000160001ffffff",
   );
   const [newImei, setNewImei] = useState("");
 
@@ -307,8 +307,8 @@ export default function AlarmDecoder() {
                   item.type === "imei"
                     ? "number"
                     : item.type === "date"
-                    ? "datetime-local"
-                    : "text"
+                      ? "datetime-local"
+                      : "text"
                 }
                 value={displayValue}
                 onChange={(e) => handleFieldChange(item, e.target.value)}
@@ -319,8 +319,8 @@ export default function AlarmDecoder() {
                     item.type === "date"
                       ? "1"
                       : item.type === "float"
-                      ? "0.000001"
-                      : "1",
+                        ? "0.000001"
+                        : "1",
                 }}
               />
               <Typography

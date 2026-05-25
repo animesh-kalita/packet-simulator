@@ -191,7 +191,7 @@ function SimulationPanel({ systemInfo }) {
 
       const linesToModify = lines.slice(startLine, endLine + 1);
       const allCommented = linesToModify.every((line) =>
-        line.trim().startsWith("//")
+        line.trim().startsWith("//"),
       );
 
       let modificationDone = false;

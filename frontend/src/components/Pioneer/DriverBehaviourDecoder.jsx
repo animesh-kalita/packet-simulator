@@ -18,7 +18,7 @@ const cleanHex = (h) => (h || "").replace(/\s/g, "").toUpperCase();
 const hexToFloatLE = (hex) => {
   if (!hex || hex.length !== 8) return 0;
   const bytes = new Uint8Array(
-    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
+    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)),
   );
   const view = new DataView(bytes.buffer);
   return parseFloat(view.getFloat32(0, true).toFixed(6));
@@ -106,7 +106,7 @@ const SCHEMA = [
 export default function DriverBehaviourDecoder() {
   // Sample based on your documentation table
   const [rawInput, setRawInput] = useState(
-    "252505003C000101234567891011120126010914060958866B4276D6E342912AB4411115050526010916020358866B4276D6E342912AB44111150505"
+    "252505003C000101234567891011120126010914060958866B4276D6E342912AB4411115050526010916020358866B4276D6E342912AB44111150505",
   );
   const [newImei, setNewImei] = useState("");
 
@@ -287,8 +287,8 @@ export default function DriverBehaviourDecoder() {
                   item.type === "imei"
                     ? "number"
                     : item.type === "date"
-                    ? "datetime-local"
-                    : "text"
+                      ? "datetime-local"
+                      : "text"
                 }
                 value={displayValue}
                 onChange={(e) => handleFieldChange(item, e.target.value)}
@@ -298,8 +298,8 @@ export default function DriverBehaviourDecoder() {
                     item.type === "date"
                       ? "1"
                       : item.type === "float"
-                      ? "0.000001"
-                      : "1",
+                        ? "0.000001"
+                        : "1",
                 }}
               />
               <Typography

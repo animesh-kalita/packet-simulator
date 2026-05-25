@@ -1,41 +1,60 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
-  Accordion, AccordionSummary, AccordionDetails, Typography,
-  Box, Stack, TextField, ToggleButtonGroup, ToggleButton, Paper, Divider,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { urlEncode, urlDecode, bytesToBase64, base64ToBytes, utf8ToBytes, asciiToBytes } from '../utils/converters';
-import { bytesToUTF8 } from '../utils/converters';
-import { bytesToHex } from '../utils/converters';
-import CopyButton from './CopyButton';
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+  Box,
+  Stack,
+  TextField,
+  ToggleButtonGroup,
+  ToggleButton,
+  Paper,
+  Divider,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import {
+  urlEncode,
+  urlDecode,
+  bytesToBase64,
+  base64ToBytes,
+  utf8ToBytes,
+  asciiToBytes,
+} from "../utils/converters";
+import { bytesToUTF8 } from "../utils/converters";
+import { bytesToHex } from "../utils/converters";
+import CopyButton from "./CopyButton";
 
 export default function EncodingTools() {
-  const [mode, setMode] = useState('url');
-  const [input, setInput] = useState('');
+  const [mode, setMode] = useState("url");
+  const [input, setInput] = useState("");
 
   const result = (() => {
-    if (!input) return { output: '', error: null };
+    if (!input) return { output: "", error: null };
 
     switch (mode) {
-      case 'url': {
+      case "url": {
         const encoded = urlEncode(input);
         return { output: encoded, error: null };
       }
-      case 'url-decode': {
+      case "url-decode": {
         const decoded = urlDecode(input);
-        return { output: decoded || '', error: decoded === null ? 'Invalid URL encoding' : null };
+        return {
+          output: decoded || "",
+          error: decoded === null ? "Invalid URL encoding" : null,
+        };
       }
-      case 'b64-encode': {
+      case "b64-encode": {
         const bytes = utf8ToBytes(input);
         return { output: bytesToBase64(bytes), error: null };
       }
-      case 'b64-decode': {
+      case "b64-decode": {
         const bytes = base64ToBytes(input);
-        if (!bytes) return { output: '', error: 'Invalid Base64 input' };
+        if (!bytes) return { output: "", error: "Invalid Base64 input" };
         return { output: bytesToUTF8(bytes) || bytesToHex(bytes), error: null };
       }
       default:
-        return { output: '', error: null };
+        return { output: "", error: null };
     }
   })();
 
@@ -66,14 +85,17 @@ export default function EncodingTools() {
             minRows={2}
             maxRows={4}
             value={input}
-            onChange={e => setInput(e.target.value)}
+            onChange={(e) => setInput(e.target.value)}
             placeholder={
-              mode === 'url' ? 'Text to URL-encode...' :
-              mode === 'url-decode' ? 'URL-encoded string...' :
-              mode === 'b64-encode' ? 'Text to Base64-encode...' :
-              'Base64 string to decode...'
+              mode === "url"
+                ? "Text to URL-encode..."
+                : mode === "url-decode"
+                  ? "URL-encoded string..."
+                  : mode === "b64-encode"
+                    ? "Text to Base64-encode..."
+                    : "Base64 string to decode..."
             }
-            sx={{ '& textarea': { fontFamily: 'monospace' } }}
+            sx={{ "& textarea": { fontFamily: "monospace" } }}
             aria-label="Encoding input"
           />
 
@@ -83,11 +105,11 @@ export default function EncodingTools() {
                 <Typography
                   variant="body2"
                   sx={{
-                    fontFamily: 'monospace',
-                    fontSize: '0.85rem',
-                    wordBreak: 'break-all',
+                    fontFamily: "monospace",
+                    fontSize: "0.85rem",
+                    wordBreak: "break-all",
                     flex: 1,
-                    whiteSpace: 'pre-wrap',
+                    whiteSpace: "pre-wrap",
                   }}
                 >
                   {result.output}
@@ -98,7 +120,9 @@ export default function EncodingTools() {
           )}
 
           {result.error && (
-            <Typography variant="body2" color="error">{result.error}</Typography>
+            <Typography variant="body2" color="error">
+              {result.error}
+            </Typography>
           )}
         </Stack>
       </AccordionDetails>

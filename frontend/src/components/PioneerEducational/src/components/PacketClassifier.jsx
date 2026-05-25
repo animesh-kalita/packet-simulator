@@ -211,7 +211,11 @@ const PacketClassifier = ({ packetData }) => {
           </Grid>
 
           <Grid item xs={12}>
-            <Box mt={3} p={2} sx={{ bgcolor: 'action.selected', borderRadius: 1 }}>
+            <Box
+              mt={3}
+              p={2}
+              sx={{ bgcolor: "action.selected", borderRadius: 1 }}
+            >
               <Typography variant="h6" gutterBottom>
                 Classification Details
               </Typography>

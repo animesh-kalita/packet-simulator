@@ -284,7 +284,7 @@ export function TeltonikaPacketSplitter() {
 
     if (packets.length === 0) {
       setError(
-        "No valid packets found. Check if input is correct Teltonika format."
+        "No valid packets found. Check if input is correct Teltonika format.",
       );
       return;
     }

@@ -80,7 +80,7 @@ const hexToIntLE = (hex, signed = false) => {
 const hexToFloatLE = (hex) => {
   if (!hex || hex.length !== 8) return 0;
   const bytes = new Uint8Array(
-    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
+    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)),
   );
   const view = new DataView(bytes.buffer);
   return view.getFloat32(0, true);
@@ -132,7 +132,7 @@ const FIELD_DEFS = {
     Array.from({ length: 8 }, (_, i) => [
       21 + i,
       { s: 2, t: "mv", n: `Analog ${i + 1} (mV)` },
-    ])
+    ]),
   ),
 
   // --- IO / Counters ---
@@ -151,7 +151,7 @@ const FIELD_DEFS = {
     Array.from({ length: 6 }, (_, i) => [
       38 + i,
       { s: 2, t: "u16", n: `Fuel Level ${i + 1} (RS485)` },
-    ])
+    ]),
   ),
   44: { s: 2, t: "u16", n: "Fuel Level (RS232)" },
 
@@ -160,7 +160,7 @@ const FIELD_DEFS = {
     Array.from({ length: 8 }, (_, i) => [
       45 + i,
       { s: 1, t: "i8", n: `Temp Digital ${i + 1}` },
-    ])
+    ]),
   ),
 
   // --- CAN Data (53-69) ---
@@ -173,7 +173,7 @@ const FIELD_DEFS = {
     Array.from({ length: 5 }, (_, i) => [
       58 + i,
       { s: 2, t: "u16", n: `CAN Axle Load ${i + 1}` },
-    ])
+    ]),
   ),
   63: { s: 1, t: "u8", n: "Gas Pedal %" },
   64: { s: 1, t: "u8", n: "Brake Pedal %" },
@@ -198,7 +198,7 @@ const FIELD_DEFS = {
     Array.from({ length: 6 }, (_, i) => [
       78 + i,
       { s: 1, t: "i8", n: `Temp Fuel Sensor ${i + 1}` },
-    ])
+    ]),
   ),
 
   // --- Combined Fuel (84-93) ---
@@ -206,7 +206,7 @@ const FIELD_DEFS = {
     Array.from({ length: 10 }, (_, i) => [
       84 + i,
       { s: 3, t: "fuel_combo", n: `Fuel Level+Temp ${i + 7}` },
-    ])
+    ]),
   ),
 
   // --- Tire Sensors (94-97) ---
@@ -254,7 +254,7 @@ const FIELD_DEFS = {
     Array.from({ length: 8 }, (_, i) => [
       110 + i,
       { s: 2, t: "passengers", n: `Pass Cnt ${i * 2 + 1}-${i * 2 + 2}` },
-    ])
+    ]),
   ),
 
   118: {
@@ -292,7 +292,7 @@ const FIELD_DEFS = {
     Array.from({ length: 6 }, (_, i) => [
       127 + i,
       { s: 4, t: "u32", n: `Pulse Counter ${i + 3}` },
-    ])
+    ]),
   ),
 
   // Freq Analog 3-8 (133-138)
@@ -300,7 +300,7 @@ const FIELD_DEFS = {
     Array.from({ length: 6 }, (_, i) => [
       133 + i,
       { s: 2, t: "u16", n: `Freq Analog ${i + 3}` },
-    ])
+    ]),
   ),
 
   139: { s: 1, t: "bits", n: "Accel Virtual Sensor" },
@@ -326,7 +326,7 @@ const parseTires = (hex) => `${hex.length / 6} Sensors`;
 const parseFuelCombo = (hex) =>
   `Lvl:${hexToIntLE(hex.substring(0, 4))}, T:${hexToIntLE(
     hex.substring(4, 6),
-    true
+    true,
   )}`;
 const parseAccel3 = (hex) => {
   const x = hexToIntLE(hex.substring(0, 4), true);
@@ -336,16 +336,16 @@ const parseAccel3 = (hex) => {
 };
 const parsePassengers = (hex) =>
   `In:${hexToIntLE(hex.substring(0, 2))}, Out:${hexToIntLE(
-    hex.substring(2, 4)
+    hex.substring(2, 4),
   )}`;
 const parseTilt2 = (hex) =>
   `P:${hexToIntLE(hex.substring(0, 2), true)}, R:${hexToIntLE(
     hex.substring(2, 4),
-    true
+    true,
   )}`;
 const parseTilt3 = (hex) =>
   `X:${hexToIntLE(hex.substring(0, 2))}, Y:${hexToIntLE(
-    hex.substring(2, 4)
+    hex.substring(2, 4),
   )}, Z:${hexToIntLE(hex.substring(4, 6))}`;
 
 /* =====================
@@ -389,13 +389,17 @@ const generateRealPacket = () => {
     else if (def.t === "u16") dataHex += intToHexLE(1234, 2);
     else if (def.t === "u8" || def.t === "bits" || def.t === "gsm")
       dataHex += intToHexLE(10, 1);
-    else if (def.t === "i8") dataHex += intToHexLE(25, 1); // 25C
+    else if (def.t === "i8")
+      dataHex += intToHexLE(25, 1); // 25C
     else if (def.t === "i16") dataHex += intToHexLE(-500, 2);
     else if (def.t === "i32") dataHex += intToHexLE(50000, 4);
     else if (def.t === "float") dataHex += floatToHexLE(123.45);
-    else if (def.t === "latlon") dataHex += intToHexLE(33422389, 4); // 55 deg
-    else if (def.t === "alt") dataHex += intToHexLE(1500, 4); // 150m
-    else if (def.t === "mv") dataHex += intToHexLE(12500, 2); // 12.5V
+    else if (def.t === "latlon")
+      dataHex += intToHexLE(33422389, 4); // 55 deg
+    else if (def.t === "alt")
+      dataHex += intToHexLE(1500, 4); // 150m
+    else if (def.t === "mv")
+      dataHex += intToHexLE(12500, 2); // 12.5V
     else if (def.t === "hex") dataHex += "00".repeat(def.s);
     // Complex
     else if (def.t === "latlon64") dataHex += "00".repeat(16);
@@ -403,8 +407,8 @@ const generateRealPacket = () => {
     else if (def.t === "tires") dataHex += "00".repeat(def.s);
     else if (def.t === "fuel_combo") dataHex += "00".repeat(3);
     else if (def.t === "accel3")
-      dataHex +=
-        intToHexLE(100, 2) + intToHexLE(-50, 2) + intToHexLE(980, 2); // X,Y,Z
+      dataHex += intToHexLE(100, 2) + intToHexLE(-50, 2) + intToHexLE(980, 2);
+    // X,Y,Z
     else if (def.t === "passengers")
       dataHex += intToHexLE(5, 1) + intToHexLE(3, 1);
     else if (def.t === "tilt2") dataHex += intToHexLE(5, 1) + intToHexLE(-2, 1);

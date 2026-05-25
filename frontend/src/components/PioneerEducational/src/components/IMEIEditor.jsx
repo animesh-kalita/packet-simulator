@@ -148,7 +148,7 @@ const IMEIEditor = ({ packetBytes, onIMEIChange, onPacketUpdate }) => {
         </Box>
 
         {/* Current IMEI Display */}
-        <Box mb={3} p={2} sx={{ bgcolor: 'action.selected', borderRadius: 1 }}>
+        <Box mb={3} p={2} sx={{ bgcolor: "action.selected", borderRadius: 1 }}>
           <Typography variant="h6" gutterBottom>
             Current IMEI in Packet
           </Typography>
@@ -214,7 +214,7 @@ const IMEIEditor = ({ packetBytes, onIMEIChange, onPacketUpdate }) => {
         )}
 
         {/* Technical Details */}
-        <Box mt={3} p={2} sx={{ bgcolor: 'action.selected', borderRadius: 1 }}>
+        <Box mt={3} p={2} sx={{ bgcolor: "action.selected", borderRadius: 1 }}>
           <Typography variant="h6" gutterBottom>
             Technical Details
           </Typography>

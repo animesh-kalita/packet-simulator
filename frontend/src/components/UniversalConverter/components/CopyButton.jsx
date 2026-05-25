@@ -1,9 +1,9 @@
-import { useState, useCallback } from 'react';
-import { IconButton, Tooltip } from '@mui/material';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import CheckIcon from '@mui/icons-material/Check';
+import { useState, useCallback } from "react";
+import { IconButton, Tooltip } from "@mui/material";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import CheckIcon from "@mui/icons-material/Check";
 
-export default function CopyButton({ text, size = 'small', label = 'Copy' }) {
+export default function CopyButton({ text, size = "small", label = "Copy" }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = useCallback(async () => {
@@ -13,11 +13,11 @@ export default function CopyButton({ text, size = 'small', label = 'Copy' }) {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
-      const ta = document.createElement('textarea');
+      const ta = document.createElement("textarea");
       ta.value = String(text);
       document.body.appendChild(ta);
       ta.select();
-      document.execCommand('copy');
+      document.execCommand("copy");
       document.body.removeChild(ta);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
@@ -25,15 +25,19 @@ export default function CopyButton({ text, size = 'small', label = 'Copy' }) {
   }, [text]);
 
   return (
-    <Tooltip title={copied ? 'Copied!' : label} arrow>
+    <Tooltip title={copied ? "Copied!" : label} arrow>
       <IconButton
         size={size}
         onClick={handleCopy}
-        color={copied ? 'success' : 'default'}
+        color={copied ? "success" : "default"}
         aria-label={label}
-        sx={{ opacity: 0.7, '&:hover': { opacity: 1 } }}
+        sx={{ opacity: 0.7, "&:hover": { opacity: 1 } }}
       >
-        {copied ? <CheckIcon fontSize={size} /> : <ContentCopyIcon fontSize={size} />}
+        {copied ? (
+          <CheckIcon fontSize={size} />
+        ) : (
+          <ContentCopyIcon fontSize={size} />
+        )}
       </IconButton>
     </Tooltip>
   );
