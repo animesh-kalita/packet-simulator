@@ -18,6 +18,7 @@ import SinocastelPacketViewer from "./Sinocastel/SinocastelPacketViewer";
 import SinocastelRawPacketViewer from "./Sinocastel/SinocastelRawPacketViewer";
 import App from "./PioneerEducational/src/App";
 import UniversalConverter from "./UniversalConverter/UniversalConverter";
+import TeltonikaVisualizer from "./Teltonika/TeltonikaVisualizer";
 
 const MenuBar = () => {
   const [value, setValue] = useState(0);
@@ -29,6 +30,7 @@ const MenuBar = () => {
   const menus = [
     "event_flag",
     "teltonika",
+    "teltonika-educational",
     "concox",
     "apm_rma_201",
     "sinocastel",
@@ -56,6 +58,12 @@ const MenuBar = () => {
             <TeltonikaTools />
             <TeltonikaDecoder />
             <PacketBreakdown />
+          </>
+        );
+      case "teltonika-educational":
+        return (
+          <>
+            <TeltonikaVisualizer />
           </>
         );
       case "concox":

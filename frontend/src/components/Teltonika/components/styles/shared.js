@@ -1,0 +1,22 @@
+const sharedStyles = {};
+
+export const STATE_COLORS = {
+  WAITING_IMEI: "#9E9E9E",
+  IMEI_RECEIVED: "#4CAF50",
+  WAITING_PACKET: "#2196F3",
+  READING_AVL: "#FF9800",
+  VALIDATING_CRC: "#9C27B0",
+  SENDING_ACK: "#00BCD4",
+  ERROR: "#F44336",
+  CLOSED: "#607D8B",
+};
+
+export const SESSION_COLORS = {
+  DISCONNECTED: "#F44336",
+  CONNECTED: "#2196F3",
+  AUTHENTICATED: "#4CAF50",
+  ERROR: "#F44336",
+  CLOSED: "#607D8B",
+};
+
+export default sharedStyles;
